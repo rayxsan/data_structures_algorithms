@@ -19,5 +19,17 @@ export function isArraySorted(array: number[]): boolean {
  * If found, return the index of the element, and -1 otherwise
  */
 export function binarySearch(array: number[], key: number): number {
-  return 0;
+  let lo = 0; // First element in the array
+  let hi = array.length - 1; // Last elem in the array
+  while (lo <= hi) {
+    let mid = Math.floor(lo + (hi - lo) / 2);
+    if (key < array[mid]) {
+      hi = mid - 1;
+    } else {
+      if (key > array[mid]) {
+        lo = mid + 1;
+      } else return mid;
+    }
+  }
+  return -1;
 }

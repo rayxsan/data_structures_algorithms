@@ -15,10 +15,10 @@ describe("Array is sorted", () => {
     expect(isArraySorted(array)).toBe(false);
   });
 });
-/*
+
 describe("binarySearch", () => {
   test("searching for element at position 2", () => {
-    const array = [1, 2, 3, 4];
+    const array = [1, 2, 3, 4, 5];
     expect(binarySearch(array, 3)).toBe(2);
   });
 
@@ -27,8 +27,7 @@ describe("binarySearch", () => {
   });
 
   test("search for an element not present", () => {
-    const array = [1, 2, 3, 4];
-    expect(binarySearch(array, 5)).toBe(-1);
+    const array = [1, 2, 3, 4, 5];
+    expect(binarySearch(array, 7)).toBe(-1);
   });
 });
-*/
