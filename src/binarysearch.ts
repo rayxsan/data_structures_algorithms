@@ -5,9 +5,10 @@ export function isArraySorted(array: number[]): boolean {
     result = true;
   } else {
     for (let i = 1; i < array.length; i++) {
-      if (array[i - 1] < array[i]) {
-        result = true;
-      } else result = false;
+      if (array[i - 1] > array[i]) {
+        result = false;
+        break;
+      } else result = true;
     }
   }
   return result;

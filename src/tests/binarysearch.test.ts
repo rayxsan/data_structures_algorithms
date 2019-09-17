@@ -11,7 +11,7 @@ describe("Array is sorted", () => {
   });
 
   test("not-sorted", () => {
-    const array = [1, 20, 5, 4];
+    const array = [1, 3, 5, 4, 7, 8];
     expect(isArraySorted(array)).toBe(false);
   });
 });
