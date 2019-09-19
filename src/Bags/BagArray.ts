@@ -1,4 +1,4 @@
-class Bag<T> {
+class BagArray<T> {
   constructor() {}
   add(item: T) {}
   isEmpty(): boolean {
@@ -8,4 +8,5 @@ class Bag<T> {
     return -1;
   }
 }
-export default Bag;
+
+export default BagArray;
