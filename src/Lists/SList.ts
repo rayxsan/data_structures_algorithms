@@ -2,7 +2,7 @@
 
 class SListNode {
   value: number;
-  next: SListNode;
+  next: SListNode | null;
 
   constructor(value: number, next: SListNode | null = null) {
     this.value = value;
@@ -32,6 +32,17 @@ class SList {
   isEmpty(): boolean {
     throw new Error("not implemented yet");
     return false;
+  }
+
+  // this methods allows us to loop over the list like this
+  // for (let val of myList) {
+  //   console.log(val); // prints the values stored in the list
+  // }
+  //
+  *[Symbol.iterator]() {
+    for (let itr = this.first; itr !== null; itr = itr.next) {
+      yield itr.value;
+    }
   }
 }
 
