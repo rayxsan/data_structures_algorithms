@@ -1,17 +1,11 @@
 export function isArraySorted(array: number[]): boolean {
-  let result: boolean;
-  // compare the i elements with the i-1, and check that they are in order
-  if (array.length === 0) {
-    result = true;
-  } else {
-    for (let i = 1; i < array.length; i++) {
-      if (array[i - 1] > array[i]) {
-        result = false;
-        break;
-      } else result = true;
+  let isSorted = true;
+  for (let i = 1; isSorted && i < array.length; i++) {
+    if (array[i - 1] > array[i]) {
+      isSorted = false;
     }
   }
-  return result;
+  return isSorted;
 }
 
 /**
