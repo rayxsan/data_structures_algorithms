@@ -5,6 +5,7 @@
     "outDir": "build",
     "sourceMap": true,
     "strict": true,
+    "strictNullChecks": false,
     "target": "es6"
   },
   "include": ["src"]
