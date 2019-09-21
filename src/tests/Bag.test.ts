@@ -6,7 +6,7 @@ describe("Bags", () => {
   test("Check if the bag is empty", () => {
     const myBag = new Bag();
     expect(myBag.isEmpty()).toBe(true);
-    myBag.add(0);
+    myBag.add("Text");
     expect(myBag.isEmpty()).toBe(false);
   });
 
