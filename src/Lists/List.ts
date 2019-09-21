@@ -40,11 +40,17 @@ class List {
   }
 
   remove_first() {
-    throw new Error("not implemented yet");
+    if (!this.isEmpty()) {
+      this.sentinel.next = this.sentinel.next.next;
+      this.sentinel.next.next.prev = this.sentinel;
+    } else throw new Error("List is Empty");
   }
 
   remove_last() {
-    throw new Error("not implemented yet");
+    if (!this.isEmpty()) {
+      this.sentinel.prev = this.sentinel.prev.prev;
+      this.sentinel.prev.prev.next = this.sentinel;
+    } else throw new Error("not implemented yet");
   }
 
   get_first() {
