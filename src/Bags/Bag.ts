@@ -10,7 +10,7 @@ class BagNode<T> {
 
 class Bag<T> {
   private first: BagNode<T> | null;
-  private bag_size = 0;
+  private bag_size: number = 0;
   constructor() {
     this.first = null;
   }
