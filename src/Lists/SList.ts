@@ -1,37 +1,40 @@
 // TODO: use generics so that lists can handle any type
 
-class SListNode {
-  value: number;
-  next: SListNode | null;
+class SListNode<T> {
+  value: T;
+  next: SListNode<T> | null;
 
-  constructor(value: number, next: SListNode | null = null) {
+  constructor(value: T, next: SListNode<T> | null = null) {
     this.value = value;
     this.next = next;
   }
 }
 
-class SList {
-  private first: SListNode | null;
+class SList<T> {
+  private first: SListNode<T> | null;
   constructor() {
     this.first = null;
   }
 
-  insert_first(value: number) {
+  isEmpty(): boolean {
+    return this.first === null;
+  }
+
+  insert_first(value: T) {
     const n = new SListNode(value, this.first);
     this.first = n;
   }
 
   delete_first() {
-    throw new Error("not implemented yet");
+    if (!this.isEmpty()) {
+      this.first = this.first.next;
+    } else throw new Error("not implemented yet");
   }
 
   get_first() {
-    throw new Error("not implemented yet");
-  }
-
-  isEmpty(): boolean {
-    throw new Error("not implemented yet");
-    return false;
+    if (!this.isEmpty()) {
+      return this.first.value;
+    } else throw new Error("List is empty");
   }
 
   // this methods allows us to loop over the list like this
