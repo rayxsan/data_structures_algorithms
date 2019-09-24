@@ -20,19 +20,19 @@ class SList<T> {
     return this.first === null;
   }
 
-  insert_first(value: T) {
+  insertFirst(value: T) {
     const n = new SListNode(value, this.first);
     this.first = n;
   }
 
   delete_first() {
-    if (!this.isEmpty()) {
+    if (!this.isEmpty() && this.first) {
       this.first = this.first.next;
-    } else throw new Error("not implemented yet");
+    } else throw new Error("List is empty");
   }
 
-  get_first() {
-    if (!this.isEmpty()) {
+  getFirst() {
+    if (!this.isEmpty() && this.first) {
       return this.first.value;
     } else throw new Error("List is empty");
   }
@@ -45,6 +45,14 @@ class SList<T> {
   *[Symbol.iterator]() {
     for (let itr = this.first; itr !== null; itr = itr.next) {
       yield itr.value;
+    }
+  }
+
+  // Here is an example of the forEach
+  // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/forEach
+  forEach(cb: (elem: T) => void) {
+    for (let itr = this.first; itr !== null; itr = itr.next) {
+      cb(itr.value);
     }
   }
 }
