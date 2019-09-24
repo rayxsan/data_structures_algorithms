@@ -18,14 +18,6 @@ class BagArray<T> {
     //this.b_array.length == 0? true : false;
   }
 
-  get_value(index: number) {
-    if (!this.isEmpty()) {
-      if (this.b_array[index] != undefined) {
-        return this.b_array[index];
-      } else throw new Error("Undefined value");
-    } else throw new Error("Bag is empty");
-  }
-
   size(): number {
     return this.b_array.length;
   }

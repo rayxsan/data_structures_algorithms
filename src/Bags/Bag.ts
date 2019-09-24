@@ -10,22 +10,35 @@ class BagNode<T> {
 
 class Bag<T> {
   private first: BagNode<T> | null;
-  private bag_size: number = 0;
+  private bagSize: number = 0;
   constructor() {
     this.first = null;
   }
 
   add(item: T) {
     const b = new BagNode(item);
+    b.next = this.first;
     this.first = b;
-    this.bag_size = this.bag_size + 1;
+    this.bagSize = this.bagSize + 1;
   }
 
   isEmpty(): boolean {
     return this.first === null;
   }
   size(): number {
-    return this.bag_size;
+    return this.bagSize;
+  }
+
+  *[Symbol.iterator]() {
+    for (let itr = this.first; itr !== null; itr = itr.next) {
+      yield itr.item;
+    }
+  }
+
+  forEach(cb: (elem: T) => void) {
+    for (let itr = this.first; itr !== null; itr = itr.next) {
+      cb(itr.item);
+    }
   }
 }
 export default Bag;

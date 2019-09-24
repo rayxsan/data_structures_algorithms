@@ -10,13 +10,13 @@ describe("Bags", () => {
     expect(myBag.isEmpty()).toBe(false);
   });
 
-  test("Bag size", () => {
-    const myBag = new Bag();
+  test("verify add and size", () => {
+    const myBag = new Bag<number>();
     expect(myBag.size()).toBe(0);
 
-    for (let i = 0; i < 5; i++) {
-      myBag.add(i);
-      expect(myBag.size()).toBe(i + 1);
+    const array = [1, 2, 3, 4, 5];
+    for (let elem of myBag) {
+      expect(array.includes(elem)).toBeTruthy;
     }
   });
 });
