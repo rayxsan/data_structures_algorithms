@@ -11,7 +11,7 @@ class ListNode<T> {
 }
 
 class List<T> {
-  sentinel: ListNode<T>;
+  private sentinel: ListNode<T>;
 
   constructor() {
     this.sentinel = new ListNode({} as T);
@@ -45,6 +45,8 @@ class List<T> {
 
   private remove(node: ListNode<T>) {
     // TODO: write a generic remove
+    if (node.next) node.next.prev = node.prev;
+    if (node.prev) node.prev.next = node.next;
   }
 
   removeFirst() {
