@@ -21,7 +21,7 @@ describe("SList", () => {
     for (let i = 1; i < 10; i++) {
       my_list.insertFirst(i);
     }
-    my_list.delete_first();
+    my_list.deleteFirst();
     expect(my_list.getFirst()).toBe(8);
   });
 });
