@@ -16,11 +16,10 @@ describe("Queue", () => {
     const b: number[] = [];
     for (let i = 0; i < a.length; i++) {
       myQueue.enqueue(a[i]);
+    }
+    for (let i = 0; i < 5; i++) {
       b[i] = myQueue.dequeue();
     }
-    /*for (let i = 0; i < 5; i++) {
-      b[i] = myQueue.dequeue();
-    }*/
     for (let i = 0; i < a.length; i++) {
       expect(a[i]).toBe(b[i]);
     }
