@@ -9,7 +9,9 @@ class Queue<T> {
     this.list.insertLast(item);
   }
   dequeue(): T {
-    return {} as T;
+    let value = this.list.getFirst();
+    this.list.removeFirst();
+    return value;
   }
   isEmpty(): boolean {
     return this.list.isEmpty();
