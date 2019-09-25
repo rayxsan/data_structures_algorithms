@@ -1,9 +1,9 @@
 import Queue from "../Queues/Queue";
 
 describe("Queue", () => {
-  const a = [1, 2, 3, 4, 5];
-  const myQueue = new Queue<number>();
   test("Is Empty? ", () => {
+    const a = [1, 2, 3, 4, 5];
+    const myQueue = new Queue<number>();
     expect(myQueue.isEmpty()).toBeTruthy;
     for (let i = 0; i < a.length; i++) {
       myQueue.enqueue(a[i]);
@@ -11,6 +11,8 @@ describe("Queue", () => {
     expect(myQueue.isEmpty()).toBeFalsy;
   });
   test("Remove element", () => {
+    const a = [1, 2, 3, 4, 5];
+    const myQueue = new Queue<number>();
     const b: number[] = [];
     for (let i = 0; i < a.length; i++) {
       myQueue.enqueue(a[i]);
@@ -22,5 +24,15 @@ describe("Queue", () => {
     for (let i = 0; i < a.length; i++) {
       expect(a[i]).toBe(b[i]);
     }
+  });
+
+  test("Size of the queue", () => {
+    const a = [1, 2, 3, 4, 5];
+    const myQueue = new Queue<number>();
+    expect(myQueue.size()).toBe(0);
+    for (let i = 0; i < a.length; i++) {
+      myQueue.enqueue(a[i]);
+    }
+    expect(myQueue.size()).toBe(a.length);
   });
 });
