@@ -1,12 +1,12 @@
 import Bag from "../Bags/Bag";
 
 describe("Bags", () => {
-  test("Add elem to Bag", () => {});
+  //test("Add elem to Bag", () => {});
 
   test("Check if the bag is empty", () => {
     const myBag = new Bag();
     expect(myBag.isEmpty()).toBe(true);
-    myBag.add("Text");
+    myBag.add(2);
     expect(myBag.isEmpty()).toBe(false);
   });
 
