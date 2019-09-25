@@ -29,9 +29,13 @@ describe("Stacks", () => {
     expect(myStack.size()).toBe(a.length);
   });
 
-  test("Add an item to the stack", () => {
+  test("Add an item to the stack and remove it", () => {
     let a = [1, 2, 3, 4, 5];
     const myStack = new Stack<number>();
+
+    // Try to remove an item from an empty Stack
+    expect(() => myStack.pop()).toThrowError("Stack is empty");
+
     const b: number[] = [];
 
     for (let i = 0; i < a.length; i++) {

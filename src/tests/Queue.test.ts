@@ -13,6 +13,10 @@ describe("Queue", () => {
   test("Remove element", () => {
     const a = [1, 2, 3, 4, 5];
     const myQueue = new Queue<number>();
+
+    // Try to remove an element from an empty queue
+    expect(() => myQueue.dequeue()).toThrowError("Queue is empty");
+
     const b: number[] = [];
     for (let i = 0; i < a.length; i++) {
       myQueue.enqueue(a[i]);
