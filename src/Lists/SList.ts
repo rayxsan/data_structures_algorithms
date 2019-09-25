@@ -25,7 +25,7 @@ class SList<T> {
     this.first = n;
   }
 
-  delete_first() {
+  deleteFirst() {
     if (!this.isEmpty() && this.first) {
       this.first = this.first.next;
     } else throw new Error("List is empty");
