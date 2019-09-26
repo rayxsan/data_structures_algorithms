@@ -1,7 +1,7 @@
 class Vector<T> {
-  capacity: number;
-  len: number = 0;
-  array: T[];
+  private capacity: number;
+  private len: number = 0;
+  private array: T[];
 
   constructor(initialCapacity: number = 8) {
     const capacity = Math.max(initialCapacity, 8);
@@ -11,27 +11,35 @@ class Vector<T> {
   }
 
   private grow() {
-    // This function handles the case when we are out of space
-    // when that is the case, then use the following strategy:
-    // 1. create a new array of size 2 times bigger than the current one
-    // 2. copy all elements to the new array
+    //this.capacity = 2 * this.capacity;
+    const newArray = new Array<T>(2 * this.capacity);
+
+    for (let i = 0; i < this.len; i++) {
+      newArray[i] = this.array[i];
+    }
+    this.array = newArray;
   }
 
   pushBack(item: T) {
-    // check if there is space for one more item
-    // if the array has no more space left, then
-    // use the grow method to create more space
-    // finally, add the new item to the end of the array
+    if (this.len >= this.capacity) {
+      this.grow();
+    }
+    this.array[this.len] = item;
+    this.len++;
   }
 
   popBack(): T {
-    // remove the last element from the array a return it
-    // if the vector is empty, throw an error indicating so
+    if (!this.isEmpty()) {
+      this.len--;
+      return this.array[this.len];
+    } else throw new Error("Vector is empty");
   }
 
   getAt(index: number): T {
-    // return the elements at position index
-    // if the index is invalid (negative or bigger than the number of elements) throw an error
+    if (index < 0 || index > this.len - 1) {
+      throw new Error("Invalid index");
+    }
+    return this.array[index];
   }
 
   isEmpty(): boolean {
@@ -43,12 +51,45 @@ class Vector<T> {
   }
 
   *[Symbol.iterator]() {
-    // yield elements in order, from the first to the last inserted
+    for (let i = 0; i < this.len; i++) {
+      yield this.array[i];
+    }
   }
 
   forEach(cb: (elem: T, index: number) => void) {
-    // call cb with each element of the vector and its index in order, from the first to the last
+    for (let i = 0; i < this.len; i++) {
+      cb(this.array[i], i);
+    }
+  }
+
+  map<U>(predicate: (elem: T, index?: number) => U): Vector<U> {
+    const v = new Vector<U>(this.len);
+    for (let i = 0; i < this.len; i++) {
+      v.pushBack(predicate(this.array[i], i));
+    }
+    return v;
+  }
+
+  filter(predicate: (elem: T, index?: number) => boolean): Vector<T> {
+    const v = new Vector<T>(this.len);
+    for (let i = 0; i < this.len; i++) {
+      if (predicate(this.array[i], i)) {
+        v.pushBack(this.array[i]);
+      }
+    }
+    return v;
+  }
+
+  reduce(
+    predicate: (previous: T, current: T, index?: number) => T,
+    initialValue: T
+  ): T {
+    let previous = initialValue;
+    for (let i = 0; i < this.len; i++) {
+      previous = predicate(previous, this.array[i], i);
+    }
+    return previous;
   }
 }
 
-export default Vectors;
+export default Vector;
