@@ -33,23 +33,75 @@ function sort(array: number[], lo: number, hi: number) {
   sort(array, mid + 1, hi);
   merge(array, lo, mid, hi);
 }
+//function mergeSort<T>(array: T[], cmp: (a: T, b: T) => number): T[]{}
 
-function mergeSort<T>(array: T[], cmp: (a: T, b: T) => number): number[] {
-  // create an aux array
-  // a, b
-  // a -merge-into-> b
-  // b -merge-into-> a
-  return [];
-}
+function mergeSort<T>(array: T[], cmp: (a: T, b: T) => number): T[] {
+  if (array.length === 0) return array;
 
-function merge1(a: number[], lo: number, mid: number, hi: number) {
-  //Merge Array 1 with Array 2
+  const aux = new Array(array.length);
+  let left: T[] = [];
+  let right: T[] = [];
+
+  for (let i = 0; i < array.length; i++) {
+    if (i < Math.floor(array.length / 2)) {
+      left[i] = array[i];
+    } else right[i] = array[i];
+  }
+
+  left = mergeSort(left, cmp);
+  right = mergeSort(right, cmp);
+  return myMerge(left, right, cmp);
 }
 
 export default mergeSort;
 
 let myArray = [4, 5, 6, 8, 9, 11, 12, 21, 1, 4];
 
-sort(myArray, 0, myArray.length - 1);
+function myMerge<T>(left: T[], right: T[], cmp: (a: T, b: T) => number) {
+  const result: T[] = new Array();
+  const comparable = cmp(left[0], right[0]);
 
-console.log(myArray);
+  while (left.length != 0 && right.length != 0) {
+    if (comparable === -1 || comparable === 0) {
+      result.push(left[0]);
+      left.shift();
+    } else {
+      result.push(right[0]);
+      right.shift();
+    }
+  }
+
+  while (left.length != 0) {
+    result.push(left[0]);
+    left.shift();
+  }
+
+  while (right.length != 0) {
+    result.push(right[0]);
+    right.shift();
+  }
+
+  return result;
+}
+
+let a1 = [1];
+let a2 = [4];
+let a3 = myMerge(a1, a2, (x: number, y: number) => {
+  if (x < y) {
+    return -1;
+  } else if (x > y) {
+    return 1;
+  } else return 0;
+});
+
+console.log(a1.length);
+
+let a4 = mergeSort(a1, (x: number, y: number) => {
+  if (x < y) {
+    return -1;
+  } else if (x > y) {
+    return 1;
+  } else return 0;
+});
+
+console.log(a4);
