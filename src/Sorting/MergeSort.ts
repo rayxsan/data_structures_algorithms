@@ -36,55 +36,59 @@ function sort(array: number[], lo: number, hi: number) {
 //function mergeSort<T>(array: T[], cmp: (a: T, b: T) => number): T[]{}
 
 function mergeSort<T>(array: T[], cmp: (a: T, b: T) => number): T[] {
-  if (array.length === 0) return array;
+  if (array.length === 1) {
+    return array;
+  }
 
-  const aux = new Array(array.length);
   let left: T[] = [];
   let right: T[] = [];
+  let mid = Math.floor(array.length / 2);
 
   for (let i = 0; i < array.length; i++) {
-    if (i < Math.floor(array.length / 2)) {
-      left[i] = array[i];
-    } else right[i] = array[i];
+    if (i < mid) {
+      left.push(array[i]);
+    } else right.push(array[i]);
   }
 
   left = mergeSort(left, cmp);
   right = mergeSort(right, cmp);
+  console.log(`${left} | ${right}`);
   return myMerge(left, right, cmp);
 }
 
 export default mergeSort;
 
-let myArray = [4, 5, 6, 8, 9, 11, 12, 21, 1, 4];
+let myArray = [6, 4, 5, 8, 9, 11, 12, 21, 1, 4];
 
 function myMerge<T>(left: T[], right: T[], cmp: (a: T, b: T) => number) {
   const result: T[] = new Array();
-  const comparable = cmp(left[0], right[0]);
+  let i = 0;
+  let j = 0;
+  const comparable = cmp(left[i], right[j]);
 
-  while (left.length != 0 && right.length != 0) {
+  while (i < left.length && j < right.length) {
     if (comparable === -1 || comparable === 0) {
-      result.push(left[0]);
-      left.shift();
+      result.push(left[i]);
+      i++;
     } else {
-      result.push(right[0]);
-      right.shift();
+      result.push(right[j]);
+      j++;
     }
   }
 
-  while (left.length != 0) {
-    result.push(left[0]);
-    left.shift();
+  while (i < left.length) {
+    result.push(left[i]);
+    i++;
   }
 
-  while (right.length != 0) {
-    result.push(right[0]);
-    right.shift();
+  while (j < right.length) {
+    result.push(right[j]);
+    j++;
   }
-
   return result;
 }
 
-let a1 = [1];
+let a1 = [3, 2, 5, 6, 1, 0];
 let a2 = [4];
 let a3 = myMerge(a1, a2, (x: number, y: number) => {
   if (x < y) {
@@ -94,7 +98,7 @@ let a3 = myMerge(a1, a2, (x: number, y: number) => {
   } else return 0;
 });
 
-console.log(a1.length);
+//console.log(a3);
 
 let a4 = mergeSort(a1, (x: number, y: number) => {
   if (x < y) {
