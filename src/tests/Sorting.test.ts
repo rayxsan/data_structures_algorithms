@@ -1,4 +1,5 @@
 import mergeSort from "../Sorting/MergeSort";
+import quickSort from "../Sorting/QuickSort";
 import { getRndNumbers } from "../utils/Random";
 import { getRandomPersons, Person } from "../utils/Persons";
 
