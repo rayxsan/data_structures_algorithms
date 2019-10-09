@@ -1,11 +1,22 @@
 import { MaxPQ, MinPQ } from "../Queues/PriorityQueues";
 
 describe("MaxPQ", () => {
-  test.todo("Create an empty PQ");
+  let cmpAscending = (x: number, y: number) => x < y;
+  test("Create an empty PQ", () => {
+    let myPQ = new MaxPQ(cmpAscending);
+    expect(myPQ.isEmpty()).toBeTruthy();
+  });
 
-  test.todo("Create a PQ of capacity n");
+  test("Create a PQ of capacity n", () => {
+    let myPQ = new MaxPQ(cmpAscending, 10);
+    expect(myPQ.size()).toBe(10);
+  });
 
-  test.todo("Create a PQ from an array of numbers");
+  test("Create a PQ from an array of numbers", () => {
+    const array = [13, 21, 3, 4, 8, 11, 6];
+    let myPQ = new MaxPQ(cmpAscending, array);
+    expect(myPQ.size()).toEqual(array.length);
+  });
 
   test.todo("Insert elements in PQ and verify the size and the max value");
 
