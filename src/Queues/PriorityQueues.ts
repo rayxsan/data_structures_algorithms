@@ -5,20 +5,12 @@ export class MaxPQ<T> {
 
   constructor(moreThan: (x: T, y: T) => boolean, options?: number) {
     // check if options is defined, and if so, what type it is
-
+    const maxCapacity = options;
     if (options) {
       this.len = options;
       this.array = new Array<T>(this.len);
     } else this.array = new Array<T>();
 
-    // if (options) {
-    //   if (typeof options === "number") {
-    //     this.len = Math.max(options);
-    //     this.key = new Array<T>(this.len);
-    // } else {
-    //   this.key = new Array<T>();
-    // }
-    // console.log(`${this.key}`);
     this.moreT = moreThan;
   }
 
@@ -28,7 +20,6 @@ export class MaxPQ<T> {
   insert(value: T) {
     this.array[++this.len] = value;
     this.swim(this.len);
-    console.log(this.array);
   }
 
   /**
@@ -46,9 +37,12 @@ export class MaxPQ<T> {
    * return and remove the largest value or error if empty
    */
   delMax(): T {
-    this.exch(1, this.len--);
-    this.sink(1);
-    return this.max();
+    if (!this.isEmpty()) {
+      const result = this.max();
+      this.exch(1, this.len--);
+      this.sink(1);
+      return result;
+    } else throw new Error("Is empty");
   }
 
   /**
@@ -77,9 +71,9 @@ export class MaxPQ<T> {
   }
 
   private swim(k: number) {
-    while (k > 1 && this.less(Math.ceil(k / 2), k)) {
-      this.exch(Math.ceil(k / 2), k);
-      k = Math.ceil(k / 2);
+    while (k > 1 && this.less(Math.floor(k / 2), k)) {
+      this.exch(Math.floor(k / 2), k);
+      k = Math.floor(k / 2);
     }
   }
 
@@ -94,15 +88,31 @@ export class MaxPQ<T> {
   }
 }
 
-export class MinPQ<T> {
-  constructor(lessThan: (x: T, y: T) => boolean, options?: number | T[]) {
+export class indexMinPQ<T> {
+  constructor(lessThan: (x: T, y: T) => boolean, capacity?: number) {
     // check if options is defined, and if so, what type it is
   }
 
   /**
    * insert a value in the priority queue
    */
-  insert(value: T) {}
+  insert(index: number, value: T) {}
+
+  /**
+   * change the item associated with index to value
+   */
+  change(index: number, value: T) {}
+
+  /**
+   * return true if index has some value associated, false otherwise
+   */
+  contains(index: number): boolean {
+    return false;
+  }
+  /**
+   * removes index and its associated value
+   */
+  delete(index: number) {}
 
   /**
    * return the smallest value or error if empty
@@ -131,15 +141,4 @@ export class MinPQ<T> {
   size(): number {
     return -1;
   }
-}
-
-const array = [4, 5, 6, 3, 2, 9];
-const myPQ = new MaxPQ<number>((x: number, y: number) => x < y);
-for (let i = 0; i < array.length; i++) {
-  myPQ.insert(array[i]);
-}
-array.sort((x: number, y: number) => x - y);
-console.log(myPQ.delMax());
-for (let i = 1; i < array.length - 1; i++) {
-  console.log(myPQ.delMax());
 }

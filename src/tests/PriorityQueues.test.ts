@@ -1,4 +1,4 @@
-import { MaxPQ, MinPQ } from "../Queues/PriorityQueues";
+import { MaxPQ, indexMinPQ } from "../Queues/PriorityQueues";
 
 describe("MaxPQ", () => {
   let cmpAscending = (x: number, y: number) => x < y;
@@ -20,7 +20,7 @@ describe("MaxPQ", () => {
 
   test("Insert elements in PQ and verify the size and the max value", () => {
     const array = [4, 5, 6, 1, 2];
-    const myPQ = new MaxPQ<number>((x: number, y: number) => x > y);
+    const myPQ = new MaxPQ<number>(cmpAscending);
     for (let i = 0; i < array.length; i++) {
       myPQ.insert(array[i]);
       expect(myPQ.size()).toEqual(i + 1);
@@ -35,7 +35,7 @@ describe("MaxPQ", () => {
     for (let i = 0; i < array.length; i++) {
       myPQ.insert(array[i]);
     }
-    array.sort((x: number, y: number) => x - y);
+    array.sort((x: number, y: number) => y - x);
     for (let i = 0; i < array.length; i++) {
       expect(myPQ.delMax()).toEqual(array[i]);
     }
@@ -43,5 +43,19 @@ describe("MaxPQ", () => {
     expect(myPQ.isEmpty()).toBeTruthy();
   });
 
-  test.todo("Get an error if try to delete or get max value from an empty PQ");
+  test("Get an error if try to delete or get max value from an empty PQ", () => {
+    const myPQ = new MaxPQ<number>(cmpAscending);
+    expect(() => myPQ.delMax()).toThrowError("Is empty");
+    expect(() => myPQ.max()).toThrowError("Is empty");
+  });
+});
+
+describe(" IndexMinPQ, API for a generic PQ with associated indices", () => {
+  test.todo("Create a PQ of capacity N");
+
+  test.todo("Insert item in pos k");
+
+  test.todo("change the item associated with k to item");
+
+  test.todo("");
 });
