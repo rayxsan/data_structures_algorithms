@@ -9,7 +9,7 @@ describe("MaxPQ", () => {
 
   test("Create a PQ of capacity n", () => {
     let myPQ = new MaxPQ(cmpAscending, 10);
-    expect(myPQ.size()).toBe(10);
+    expect(myPQ.size()).toBe(0);
   });
 
   // test("Create a PQ from an array of numbers", () => {
@@ -20,14 +20,20 @@ describe("MaxPQ", () => {
 
   test("Insert elements in PQ and verify the size and the max value", () => {
     const array = [4, 5, 6, 1, 2];
-    const myPQ = new MaxPQ<number>(cmpAscending);
+    const myPQ = new MaxPQ<number>(cmpAscending, 5);
     for (let i = 0; i < array.length; i++) {
       myPQ.insert(array[i]);
       expect(myPQ.size()).toEqual(i + 1);
     }
   });
 
-  test.todo("Insert elements pass the max capacity of the PQ");
+  test("Insert elements pass the max capacity of the PQ", () => {
+    let myPQ = new MaxPQ(cmpAscending, 3);
+    myPQ.insert(3);
+    myPQ.insert(2);
+    myPQ.insert(5);
+    expect(() => myPQ.insert(8)).toThrowError("Capacity exceed");
+  });
 
   test("Delete all values in the queue and verify order (from largest to smallest)", () => {
     const array = [4, 5, 6, 1, 2];

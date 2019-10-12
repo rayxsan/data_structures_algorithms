@@ -2,13 +2,13 @@ export class MaxPQ<T> {
   private array: T[];
   private len: number = 0;
   private moreT: (x: T, y: T) => boolean;
+  private maxCapacity: number = 0;
 
   constructor(moreThan: (x: T, y: T) => boolean, options?: number) {
     // check if options is defined, and if so, what type it is
-    const maxCapacity = options;
     if (options) {
-      this.len = options;
-      this.array = new Array<T>(this.len);
+      this.maxCapacity = options;
+      this.array = new Array<T>(this.maxCapacity + 1);
     } else this.array = new Array<T>();
 
     this.moreT = moreThan;
@@ -18,8 +18,13 @@ export class MaxPQ<T> {
    * insert a value in the priority queue
    */
   insert(value: T) {
-    this.array[++this.len] = value;
-    this.swim(this.len);
+    console.log(`${this.array[1]}" ",${this.maxCapacity}`);
+    if (this.maxCapacity === 0 || this.len <= this.maxCapacity) {
+      this.array[++this.len] = value;
+      this.swim(this.len);
+    } else if (this.len > this.maxCapacity) {
+      throw new Error("Capacity exceed");
+    }
   }
 
   /**
@@ -89,19 +94,35 @@ export class MaxPQ<T> {
 }
 
 export class indexMinPQ<T> {
-  constructor(lessThan: (x: T, y: T) => boolean, capacity?: number) {
-    // check if options is defined, and if so, what type it is
+  private array: T[];
+  private len: number = 0;
+  private minV: number = 0;
+
+  constructor(maxCapacity?: number) {
+    if (maxCapacity) {
+      this.len = maxCapacity;
+      this.array = new Array<T>(this.len);
+    } else {
+      this.array = new Array<T>();
+    }
   }
 
   /**
    * insert a value in the priority queue
    */
-  insert(index: number, value: T) {}
+  insert(index: number, value: T) {
+    this.array[index] = value;
+  }
 
   /**
    * change the item associated with index to value
    */
-  change(index: number, value: T) {}
+  change(index: number, value: T) {
+    this.array[index] = value;
+    if (value < this.array[this.minV]) {
+      this.minV = index;
+    }
+  }
 
   /**
    * return true if index has some value associated, false otherwise
@@ -118,7 +139,7 @@ export class indexMinPQ<T> {
    * return the smallest value or error if empty
    */
   min(): T {
-    return {} as T;
+    return this.array[this.minV];
   }
 
   /**
@@ -132,13 +153,27 @@ export class indexMinPQ<T> {
    * check if it is empty
    */
   isEmpty(): boolean {
-    return true;
+    return this.len === 0;
   }
 
   /**
    * return the number of values in the priority queue
    */
   size(): number {
-    return -1;
+    return this.len;
   }
 }
+
+let myPQ = new MaxPQ((x: number, y: number) => x < y, 3);
+myPQ.insert(4);
+myPQ.insert(5);
+myPQ.insert(6);
+myPQ.insert(7);
+console.log(myPQ.max());
+
+let myArray = [];
+myArray.push(3);
+myArray.push(3);
+myArray.push(3);
+myArray.push(4);
+console.log(myArray);

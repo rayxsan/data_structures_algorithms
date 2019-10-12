@@ -98,7 +98,7 @@ describe("testing quick-sort", () => {
   });
 
   test("sort array of random persons by ascending age", () => {
-    const cmpPersonsAscending = (x: Person, y: Person) => x.age - y.age;
+    const cmpPersonsAscending = (x: Person, y: Person) => y.age - x.age;
     const persons = getRandomPersons(10);
     const sortedPersons = [...persons].sort(cmpPersonsAscending);
     quickSort(persons, cmpPersonsAscending);
