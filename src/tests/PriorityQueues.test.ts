@@ -1,38 +1,19 @@
-import { MaxPQ, indexMinPQ } from "../Queues/PriorityQueues";
+import { MaxPQ } from "../Queues/PriorityQueues";
 
 describe("MaxPQ", () => {
-  let cmpAscending = (x: number, y: number) => x < y;
+  let cmpAscending = (x: number, y: number) => x > y;
   test("Create an empty PQ", () => {
     let myPQ = new MaxPQ(cmpAscending);
     expect(myPQ.isEmpty()).toBeTruthy();
   });
 
-  test("Create a PQ of capacity n", () => {
-    let myPQ = new MaxPQ(cmpAscending, 10);
-    expect(myPQ.size()).toBe(0);
-  });
-
-  // test("Create a PQ from an array of numbers", () => {
-  //   const array = [13, 21, 3, 4, 8, 11, 6];
-  //   let myPQ = new MaxPQ(cmpAscending, array);
-  //   expect(myPQ.size()).toEqual(array.length);
-  // });
-
   test("Insert elements in PQ and verify the size and the max value", () => {
     const array = [4, 5, 6, 1, 2];
-    const myPQ = new MaxPQ<number>(cmpAscending, 5);
+    const myPQ = new MaxPQ<number>(cmpAscending);
     for (let i = 0; i < array.length; i++) {
       myPQ.insert(array[i]);
       expect(myPQ.size()).toEqual(i + 1);
     }
-  });
-
-  test("Insert elements pass the max capacity of the PQ", () => {
-    let myPQ = new MaxPQ(cmpAscending, 3);
-    myPQ.insert(3);
-    myPQ.insert(2);
-    myPQ.insert(5);
-    expect(() => myPQ.insert(8)).toThrowError("Capacity exceed");
   });
 
   test("Delete all values in the queue and verify order (from largest to smallest)", () => {
@@ -42,6 +23,7 @@ describe("MaxPQ", () => {
       myPQ.insert(array[i]);
     }
     array.sort((x: number, y: number) => y - x);
+    console.log(array);
     for (let i = 0; i < array.length; i++) {
       expect(myPQ.delMax()).toEqual(array[i]);
     }
@@ -54,14 +36,4 @@ describe("MaxPQ", () => {
     expect(() => myPQ.delMax()).toThrowError("Is empty");
     expect(() => myPQ.max()).toThrowError("Is empty");
   });
-});
-
-describe(" IndexMinPQ, API for a generic PQ with associated indices", () => {
-  test.todo("Create a PQ of capacity N");
-
-  test.todo("Insert item in pos k");
-
-  test.todo("change the item associated with k to item");
-
-  test.todo("");
 });
