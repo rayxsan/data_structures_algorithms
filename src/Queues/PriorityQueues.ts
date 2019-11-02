@@ -12,7 +12,7 @@ export class MaxPQ<T> {
    * insert a value in the priority queue
    */
   insert(value: T) {
-    this.array.push(value);
+    this.array[this.len] = value;
     this.swim(this.len);
     this.len++;
   }
