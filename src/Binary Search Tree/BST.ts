@@ -1,110 +1,66 @@
-interface BSTNode<K, V> {
-  left: BSTNode<K, V> | null;
-  right: BSTNode<K, V> | null;
+class BSTNode<K, V> {
   key: K;
   value: V;
   nodesCount: number;
-}
+  left: BSTNode<K, V> | null;
+  right: BSTNode<K, V> | null;
 
-function createNode<K, V>(key: K, value: V): BSTNode<K, V> {
-  return { key, value, left: null, right: null, nodesCount: 1 };
+  constructor(key: K, value: V, count: number) {
+    this.key = key;
+    this.value = value;
+    this.nodesCount = count;
+    this.left = null;
+    this.right = null;
+  }
 }
-
-export enum DFSOrder {
-  PreOrder,
-  InOrder,
-  PostOrder
-}
-
 export class BST<K, V> {
-  private root: BSTNode<K, V> | null;
+  private root: BSTNode<K, V>;
   private cmp: (x: K, y: K) => number;
 
   constructor(cmp: (x: K, y: K) => number) {
-    this.root = null;
+    this.root = new BSTNode({} as K, {} as V, 1);
+    this.root.left = null;
+    this.root.right = null;
     this.cmp = cmp;
   }
 
-  private putRecursive(
-    parent: BSTNode<K, V>,
-    node: BSTNode<K, V>
-  ): BSTNode<K, V> {
-    if (this.cmp(parent.key, node.key) <= 0) {
-      if (parent.left) parent.left = this.putRecursive(parent.left, node);
-    } else if (this.cmp(parent.key, node.key) > 0) {
-      if (parent.right) parent.right = this.putRecursive(parent.right, node);
-    } else parent.value = node.value;
-    if (parent.right && parent.left)
-      parent.nodesCount =
-        this.sizeNode(parent.left) + this.sizeNode(parent.right) + 1;
-
-    return parent;
-  }
-
-  put(key: K, value: V) {
-    const node = createNode(key, value);
-    if (this.root) {
-      this.putRecursive(this.root, node);
-    } else {
-      this.root = node;
-    }
-  }
-
-  private getRecursive(node: BSTNode<K, V>, key: K) {}
-
-  get(key: K) {
-    if (this.root) {
-      return this.getRecursive(this.root, key);
-    } else {
-      throw new Error("Not found");
-    }
-  }
-
-  has(key: K): boolean {
-    return false;
-  }
-
-  /**
-   * Delete entry with key @key
-   * If no such entry is found, throw error
-   */
-
-  private delRecursive(node: BSTNode<K, V>, key: K): V {
-    return {} as V;
-  }
-  del(key: K): V {
-    if (this.root) {
-      return this.delRecursive(this.root, key);
-    } else {
-      throw new Error("Not found");
-    }
-  }
-
-  /**
-   * Get the number of elements currently in the tree
-   */
-  private sizeNode(node: BSTNode<K, V>): number {
+  private sizeNode(node: BSTNode<K, V>) {
     if (node === null) return 0;
     else return node.nodesCount;
   }
-  size(): number {
-    if (this.root) {
-      return this.sizeNode(this.root);
-    } else {
-      throw new Error("Is empty");
-    }
+
+  size() {
+    return this.sizeNode(this.root);
   }
 
-  /**
-   * Bread-First-Search Traversal
-   */
-  bfs(callback: (key: K, value: V) => any) {}
+  private getRecursive(node: BSTNode<K, V>, key: K): V {
+    if (node === null) throw new Error("Not found");
+    if (this.cmp(node.key, key) <= 0 && node.left) {
+      return this.getRecursive(node.left, key);
+    } else if (this.cmp(node.key, key) > 0) {
+      if (node.right) return this.getRecursive(node.right, key);
+    } else return node.value;
+  }
 
-  /**
-   * Depth-First-Search Traversal
-   */
-  dfs(
-    callback: (key: K, value: V) => any,
-    order: DFSOrder = DFSOrder.InOrder
-  ) {}
+  get(key: K) {
+    return this.getRecursive(this.root, key);
+  }
+
+  private putRecursive(node: BSTNode<K, V>, key: K, value: V): BSTNode<K, V> {
+    if (node === null) return new BSTNode(key, value, 1);
+    if (this.cmp(node.key, key) <= 0 && node.left) {
+      node.left = this.putRecursive(node.left, key, value);
+    } else if (this.cmp(node.key, key) > 0 && node.right) {
+      node.right = this.putRecursive(node.right, key, value);
+    } else node.value = value;
+    if (node.left && node.right)
+      node.nodesCount =
+        this.sizeNode(node.left) + this.sizeNode(node.right) + 1;
+
+    return node;
+  }
+
+  put(key: K, value: V) {
+    this.root = this.putRecursive(this.root, key, value);
+  }
 }

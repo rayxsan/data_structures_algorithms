@@ -17,11 +17,11 @@ describe("BST", () => {
 
   test("inserting values", () => {
     const myBST = new BST<number, string>(cmpF);
-    let itemCount = 1;
+    let itemCount = 0;
     for (let element of elements) {
       myBST.put(element.key, element.value);
-      expect(myBST.size()).toEqual(itemCount++);
     }
+    expect(myBST.size()).toEqual(elements.length);
   });
 
   test("getting values", () => {
