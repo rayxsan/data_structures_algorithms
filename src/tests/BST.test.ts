@@ -12,12 +12,12 @@ describe("BST", () => {
 
   test("Check size of a BST", () => {
     const myBST = new BST<number, string>(cmpF);
-    expect(myBST.size()).toEqual(0);
+    expect(() => myBST.size()).toThrowError("Is empty");
   });
 
   test("inserting values", () => {
     const myBST = new BST<number, string>(cmpF);
-    let itemCount = 0;
+    let itemCount = 1;
     for (let element of elements) {
       myBST.put(element.key, element.value);
     }
