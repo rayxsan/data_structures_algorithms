@@ -50,13 +50,13 @@ export class BST<K, V> {
 
   private getRecursive(node: BSTNode<K, V> | null, key: K): V | null {
     if (node) {
-      if (this.cmp(node.key, key) <= 0 && node.left) {
+      if (this.cmp(key, node.key) <= 0) {
         return this.getRecursive(node.left, key);
-      } else if (this.cmp(node.key, key) > 0) {
+      } else if (this.cmp(key, node.key) > 0) {
         if (node.right) return this.getRecursive(node.right, key);
       }
       return node.value;
-    } else return null;
+    } else throw new Error("Not found");
   }
 
   get(key: K) {
@@ -68,15 +68,17 @@ export class BST<K, V> {
     key: K,
     value: V
   ): BSTNode<K, V> {
-    if (node === null) return new BSTNode(key, value, 1);
-    if (this.cmp(node.key, key) <= 0) {
-      node.left = this.putRecursive(node.left, key, value);
-    } else if (this.cmp(node.key, key) > 0) {
-      node.right = this.putRecursive(node.right, key, value);
-    } else node.value = value;
-    node.nodesCount = this.sizeNode(node.left) + this.sizeNode(node.right) + 1;
+    if (node) {
+      if (this.cmp(key, node.key) <= 0) {
+        node.left = this.putRecursive(node.left, key, value);
+      } else if (this.cmp(key, node.key) > 0) {
+        node.right = this.putRecursive(node.right, key, value);
+      } else node.value = value;
+      node.nodesCount =
+        this.sizeNode(node.left) + this.sizeNode(node.right) + 1;
 
-    return node;
+      return node;
+    } else return new BSTNode(key, value, 1);
   }
 
   put(key: K, value: V) {
@@ -126,4 +128,4 @@ let myBST = new BST<number, string>((x: number, y: number) => x - y);
 myBST.put(1, "a");
 myBST.put(2, "b");
 
-console.log(myBST.get(2));
+console.log(myBST.get(1));
