@@ -1,4 +1,5 @@
 import { is } from "@babel/types";
+import { NONAME } from "dns";
 
 type NodeLabel = "root" | "left" | "right";
 
@@ -100,62 +101,55 @@ export class BST<K, V> {
   has(key: K) {
     return this.hasRecursive(this.root, key);
   }
-  private minRecursive(node: BSTNode<K, V> | null): BSTNode<K, V> {
-    if (node) {
-      if (node.left) {
-        return this.minRecursive(node.left);
-      }
-      return node;
-    } else throw new Error("Not found");
+  private minRecursive(node: BSTNode<K, V>): BSTNode<K, V> {
+    if (node.left === null) return node;
+    return this.minRecursive(node.left);
   }
   min(): K {
-    return this.minRecursive(this.root).key;
-  }
-  private deleteMinRecursive(node: BSTNode<K, V> | null): BSTNode<K, V> | null {
-    if (node) {
-      if (node.left) {
-        node.left = this.deleteMinRecursive(node.left);
-        node.nodesCount =
-          this.sizeNode(node.left) + this.sizeNode(node.right) + 1;
-        return node;
-      }
-      return node.right;
+    if (this.root) {
+      return this.minRecursive(this.root).key;
     } else throw new Error("Not found");
   }
+  private deleteMinRecursive(node: BSTNode<K, V>): BSTNode<K, V> {
+    if (node.left === null && node.right) return node.right;
+    if (node.left) node.left = this.deleteMinRecursive(node.left);
+    node.nodesCount = this.sizeNode(node.left) + this.sizeNode(node.right) + 1;
+    return node;
+  }
   deleteMin() {
-    this.root = this.deleteMinRecursive(this.root);
+    if (this.root) this.root = this.deleteMinRecursive(this.root);
   }
   /**
    * *Delete entry with key @key
    * If no such entry is found, throw error
    */
 
-  private delRecursive(node: BSTNode<K, V> | null, key: K): BSTNode<K, V> {
+  private delRecursive(node: BSTNode<K, V> | null, key: K): V {
     if (node) {
       const cmpResult = this.cmp(key, node.key);
       if (cmpResult < 0) {
-        node.left = this.delRecursive(node.left, key);
+        if (node.left) node.left.value = this.delRecursive(node.left, key);
       } else if (cmpResult > 0) {
-        node.right = this.delRecursive(node.right, key);
+        if (node.right) node.right.value = this.delRecursive(node.right, key);
       } else {
-        if (node.right) {
-          if (node.left) {
-            let t = node;
-            node = this.minRecursive(t.right);
-            node.right = this.deleteMinRecursive(t.right);
-            node.left = t.left;
-          }
-          if (node.right) return node.right;
+        if (node.right === null && node.left !== null) return node.left.value;
+        if (node.left === null && node.right !== null) return node.right.value;
+        let t = node;
+        if (t.right) {
+          node = this.minRecursive(t.right);
+          node.right = this.deleteMinRecursive(t.right);
         }
-        if (node.left) return node.left;
+        node.left = t.left;
       }
       node.nodesCount =
         this.sizeNode(node.left) + this.sizeNode(node.right) + 1;
-      return node;
+      return node.value;
     } else throw new Error("Not found");
   }
-  del(key: K) {
-    this.root = this.delRecursive(this.root, key);
+  del(key: K): V {
+    if (this.root) {
+      return this.delRecursive(this.root, key);
+    } else throw new Error("Not found");
   }
 
   printRecursive(node: BSTNode<K, V>, label: NodeLabel, indent = 0) {
@@ -174,15 +168,16 @@ export class BST<K, V> {
   /**
    * Bread-First-Search Transversal
    */
-  bfs(callback: (key: K, value: V) => any) {}
+  bfs(callback: (key: K, value: V) => any) {
+    // https://en.wikipedia.org/wiki/Breadth-first_search
+  }
 
   /**
    * Depth-First-Search Transversal
    */
-  dfs(
-    callback: (key: K, value: V) => any,
-    order: DFSOrder = DFSOrder.InOrder
-  ) {}
+  dfs(callback: (key: K, value: V) => any, order: DFSOrder = DFSOrder.InOrder) {
+    // https://en.wikipedia.org/wiki/Tree_traversal
+  }
 }
 
 let myBST = new BST<number, string>((x: number, y: number) => x - y);
@@ -238,5 +233,7 @@ insertElementsInTree(myBST, elements);
  */
 
 //myBST.print();
-myBST.deleteMin();
-console.log(myBST.min());
+let value = myBST.del(1);
+console.log(myBST.size());
+
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map
