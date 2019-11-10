@@ -24,7 +24,6 @@ describe("MaxPQ", () => {
       myPQ.insert(array[i]);
     }
     array.sort((x: number, y: number) => y - x);
-    console.log(array);
     for (let i = 0; i < array.length; i++) {
       expect(myPQ.delMax()).toEqual(array[i]);
     }
