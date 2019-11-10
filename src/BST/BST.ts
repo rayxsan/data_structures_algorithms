@@ -1,5 +1,6 @@
 import { is } from "@babel/types";
 import { NONAME } from "dns";
+import Queue from "../Queues/Queue";
 
 type NodeLabel = "root" | "left" | "right";
 
@@ -165,11 +166,17 @@ export class BST<K, V> {
     if (this.root) this.printRecursive(this.root, "root");
   }
 
-  /**
-   * Bread-First-Search Transversal
-   */
-  bfs(callback: (key: K, value: V) => any) {
+  bfs(key: K): V {
     // https://en.wikipedia.org/wiki/Breadth-first_search
+    let q = new Queue<BSTNode<K, V>>();
+    if (this.root) q.enqueue(this.root);
+    while (!q.isEmpty()) {
+      let node = q.dequeue();
+      if (node.key === key) return node.value;
+      if (node.left) q.enqueue(node.left);
+      if (node.right) q.enqueue(node.right);
+    }
+    throw Error();
   }
 
   /**
@@ -233,7 +240,7 @@ insertElementsInTree(myBST, elements);
  */
 
 //myBST.print();
-let value = myBST.del(1);
-console.log(myBST.size());
+//let value = myBST.del(1);
+//console.log(myBST.bfs(6));
 
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map

@@ -3,11 +3,11 @@ import { BST } from "../BST/BST";
 describe("BST", () => {
   let cmpF = (x: number, y: number) => x - y;
   const elements = [
-    { key: 1, value: "a" }
-    /* { key: 2, value: "b" },
+    { key: 1, value: "a" },
+    { key: 2, value: "b" },
     { key: 3, value: "c" },
     { key: 4, value: "d" },
-    { key: 5, value: "e" } */
+    { key: 5, value: "e" }
   ];
 
   test("Check size of a BST", () => {
@@ -45,6 +45,7 @@ describe("BST", () => {
 
     let itemCount = elements.length;
     for (let element of elements) {
+      console.log(element.value);
       const value = myBST.del(element.key);
       expect(value).toEqual(element.value);
       expect(myBST.size()).toEqual(itemCount--);
@@ -53,7 +54,7 @@ describe("BST", () => {
 
   test("delete elements that are not in the tree", () => {
     const myBST = new BST<number, string>(cmpF);
-    // This should throw an error
+    expect(() => myBST.del(1)).toThrowError("Not found");
   });
 
   test("Has values in key?", () => {
@@ -76,5 +77,16 @@ describe("BST", () => {
         const result = myBST.has(obj.key);
         expect(result).toEqual(obj.shouldBeInTree);
       });
+  });
+
+  test("BFS", () => {
+    const myBST = new BST<number, string>(cmpF);
+    for (let element of elements) {
+      myBST.put(element.key, element.value);
+    }
+
+    for (let element of elements) {
+      expect(myBST.bfs(element.key)).toEqual(element.value);
+    }
   });
 });
