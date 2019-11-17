@@ -1,5 +1,3 @@
-import { is } from "@babel/types";
-import { NONAME } from "dns";
 import Queue from "../Queues/Queue";
 
 type NodeLabel = "root" | "left" | "right";
@@ -102,15 +100,34 @@ export class BST<K, V> {
   has(key: K) {
     return this.hasRecursive(this.root, key);
   }
+
   private minRecursive(node: BSTNode<K, V>): BSTNode<K, V> {
     if (node.left === null) return node;
     return this.minRecursive(node.left);
   }
   min(): K {
     if (this.root) {
+      while (this.root.left !== null) {
+        this.root = this.root.left;
+      }
+
+      return this.root.key;
+    } else throw new Error("Empty tree");
+
+    /* if (this.root) {
       return this.minRecursive(this.root).key;
-    } else throw new Error("Not found");
+    } else throw new Error("Not found"); */
   }
+
+  max(): K {
+    if (this.root) {
+      while (this.root.right !== null) {
+        this.root = this.root.right;
+      }
+      return this.root.key;
+    } else throw new Error("Empty tree");
+  }
+
   private deleteMinRecursive(node: BSTNode<K, V>): BSTNode<K, V> {
     if (node.left === null && node.right) return node.right;
     if (node.left) node.left = this.deleteMinRecursive(node.left);
@@ -120,6 +137,7 @@ export class BST<K, V> {
   deleteMin() {
     if (this.root) this.root = this.deleteMinRecursive(this.root);
   }
+
   /**
    * *Delete entry with key @key
    * If no such entry is found, throw error
@@ -147,6 +165,8 @@ export class BST<K, V> {
       return node.value;
     } else throw new Error("Not found");
   }
+
+  successor(node: BSTNode<K, V>) {}
   del(key: K): V {
     if (this.root) {
       return this.delRecursive(this.root, key);
@@ -166,24 +186,62 @@ export class BST<K, V> {
     if (this.root) this.printRecursive(this.root, "root");
   }
 
-  bfs(key: K): V {
+  bfs(callback: (key: K, value: V) => boolean) {
     // https://en.wikipedia.org/wiki/Breadth-first_search
-    let q = new Queue<BSTNode<K, V>>();
+    const q = new Queue<BSTNode<K, V>>();
     if (this.root) q.enqueue(this.root);
     while (!q.isEmpty()) {
-      let node = q.dequeue();
-      if (node.key === key) return node.value;
-      if (node.left) q.enqueue(node.left);
-      if (node.right) q.enqueue(node.right);
+      const node = q.dequeue();
+      const shouldContinue = callback(node.key, node.value);
+      if (shouldContinue) {
+        if (node.left) q.enqueue(node.left);
+        if (node.right) q.enqueue(node.right);
+      } else {
+        break;
+      }
     }
-    throw Error();
   }
 
   /**
    * Depth-First-Search Transversal
    */
-  dfs(callback: (key: K, value: V) => any, order: DFSOrder = DFSOrder.InOrder) {
+  dfs(
+    callback: (key: K, value: V) => boolean,
+    order: DFSOrder = DFSOrder.InOrder
+  ) {
     // https://en.wikipedia.org/wiki/Tree_traversal
+    const inOrderTraversal = (node: BSTNode<K, V> | null) => {
+      if (node === null) return;
+      if (node.left !== null) inOrderTraversal(node.left);
+      callback(node.key, node.value);
+      if (node.right !== null) inOrderTraversal(node.right);
+    };
+
+    const preOrderTransversal = (node: BSTNode<K, V> | null) => {
+      if (node === null) return;
+      callback(node.key, node.value);
+      if (node.left !== null) inOrderTraversal(node.left);
+      if (node.right !== null) inOrderTraversal(node.right);
+    };
+
+    const posOrderTransversal = (node: BSTNode<K, V> | null) => {
+      if (node === null) return;
+      if (node.left !== null) inOrderTraversal(node.left);
+      if (node.right !== null) inOrderTraversal(node.right);
+      callback(node.key, node.value);
+    };
+
+    switch (order) {
+      case DFSOrder.InOrder: {
+        inOrderTraversal(this.root);
+      }
+      case DFSOrder.PreOder: {
+        preOrderTransversal(this.root);
+      }
+      case DFSOrder.PosOrder: {
+        posOrderTransversal(this.root);
+      }
+    }
   }
 }
 
@@ -240,7 +298,7 @@ insertElementsInTree(myBST, elements);
  */
 
 //myBST.print();
-//let value = myBST.del(1);
-//console.log(myBST.bfs(6));
+myBST.deleteMin();
+console.log(myBST.min());
 
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map

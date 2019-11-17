@@ -2,13 +2,48 @@ import { BST } from "../BST/BST";
 
 describe("BST", () => {
   let cmpF = (x: number, y: number) => x - y;
-  const elements = [
+  interface Pair<K, V> {
+    key: K;
+    value: V;
+  }
+
+  const elements: Pair<number, string>[] = [
     { key: 1, value: "a" },
     { key: 2, value: "b" },
     { key: 3, value: "c" },
     { key: 4, value: "d" },
-    { key: 5, value: "e" }
+    { key: 5, value: "e" },
+    { key: 6, value: "f" },
+    { key: 7, value: "g" }
   ];
+
+  function insertElementsInTreeRecursive(
+    tree: BST<number, string>,
+    elements: Pair<number, string>[],
+    lo: number,
+    hi: number
+  ) {
+    if (lo < hi) {
+      const mid = Math.floor(lo + (hi - lo) / 2);
+
+      const elem = elements[mid];
+      tree.put(elem.key, elem.value);
+
+      insertElementsInTreeRecursive(tree, elements, lo, mid);
+      insertElementsInTreeRecursive(tree, elements, mid + 1, hi);
+    }
+  }
+
+  function insertElementsInTree(
+    tree: BST<number, string>,
+    elements: Pair<number, string>[]
+  ) {
+    elements.sort((a, b) => a.key - b.key);
+    // [a, b)
+    insertElementsInTreeRecursive(tree, elements, 0, elements.length);
+  }
+
+  //insertElementsInTree(myBST, elements);
 
   test("Check size of a BST", () => {
     const myBST = new BST<number, string>(cmpF);
@@ -26,9 +61,7 @@ describe("BST", () => {
   test("getting values", () => {
     const myBST = new BST<number, string>(cmpF);
 
-    for (let element of elements) {
-      myBST.put(element.key, element.value);
-    }
+    insertElementsInTree(myBST, elements);
 
     for (let element of elements) {
       const value = myBST.get(element.key);
@@ -45,16 +78,11 @@ describe("BST", () => {
 
     let itemCount = elements.length;
     for (let element of elements) {
-      console.log(element.value);
       const value = myBST.del(element.key);
+      console.log("delete-value", value, "element-value", element.value);
       expect(value).toEqual(element.value);
       expect(myBST.size()).toEqual(itemCount--);
     }
-  });
-
-  test("delete elements that are not in the tree", () => {
-    const myBST = new BST<number, string>(cmpF);
-    expect(() => myBST.del(1)).toThrowError("Not found");
   });
 
   test("Has values in key?", () => {
@@ -79,14 +107,15 @@ describe("BST", () => {
       });
   });
 
-  test("BFS", () => {
+  test("Min", () => {
     const myBST = new BST<number, string>(cmpF);
+
     for (let element of elements) {
       myBST.put(element.key, element.value);
     }
-
     for (let element of elements) {
-      expect(myBST.bfs(element.key)).toEqual(element.value);
+      myBST.deleteMin();
+      expect(myBST.has(element.key)).toBeFalsy();
     }
   });
 });
