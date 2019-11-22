@@ -8,13 +8,15 @@ class BSTNode<K, V> {
   nodesCount: number;
   left: BSTNode<K, V> | null;
   right: BSTNode<K, V> | null;
+  parent: BSTNode<K, V> | null;
 
-  constructor(key: K, value: V, count: number) {
+  constructor(key: K, value: V, parent: BSTNode<K, V> | null) {
     this.key = key;
     this.value = value;
-    this.nodesCount = count;
+    this.nodesCount = 1;
     this.left = null;
     this.right = null;
+    this.parent = parent;
   }
 }
 
@@ -44,9 +46,7 @@ export class BST<K, V> {
   }
 
   size() {
-    if (this.root) {
-      return this.sizeNode(this.root);
-    } else throw new Error("Is empty");
+    return this.sizeNode(this.root);
   }
 
   private getRecursive(node: BSTNode<K, V> | null, key: K): V {
@@ -65,26 +65,33 @@ export class BST<K, V> {
   }
 
   private putRecursive(
-    node: BSTNode<K, V> | null,
-    key: K,
-    value: V
+    root: BSTNode<K, V> | null,
+    node: BSTNode<K, V>
   ): BSTNode<K, V> {
-    if (node) {
-      const cmpResult = this.cmp(key, node.key);
-      if (cmpResult < 0) {
-        node.left = this.putRecursive(node.left, key, value);
-      } else if (cmpResult > 0) {
-        node.right = this.putRecursive(node.right, key, value);
-      } else node.value = value;
-      node.nodesCount =
-        this.sizeNode(node.left) + this.sizeNode(node.right) + 1;
-
+    if (root == null) {
       return node;
-    } else return new BSTNode(key, value, 1);
+    } else {
+      const cmpResult = this.cmp(node.key, root.key);
+      console.log(`cmp(${node.key}, ${root.key}) = ${cmpResult}`);
+      if (cmpResult < 0) {
+        node.parent = root;
+        node.left = this.putRecursive(root.left, node);
+      } else if (cmpResult > 0) {
+        node.parent = root;
+        node.right = this.putRecursive(root.right, node);
+      } else {
+        root.value = node.value;
+      }
+      root.nodesCount =
+        this.sizeNode(root.left) + this.sizeNode(root.right) + 1;
+
+      return root;
+    }
   }
 
   put(key: K, value: V) {
-    this.root = this.putRecursive(this.root, key, value);
+    const node = new BSTNode(key, value, null);
+    this.root = this.putRecursive(this.root, node);
   }
 
   private hasRecursive(node: BSTNode<K, V> | null, key: K): boolean {
@@ -97,6 +104,7 @@ export class BST<K, V> {
       } else return true;
     } else return false;
   }
+
   has(key: K) {
     return this.hasRecursive(this.root, key);
   }
@@ -166,7 +174,16 @@ export class BST<K, V> {
     } else throw new Error("Not found");
   }
 
-  successor(node: BSTNode<K, V>) {}
+  successor(node: BSTNode<K, V>) {
+    if (node.right) return this.minRecursive(node.right);
+    let y = node.parent;
+    while (y && node === y.right) {
+      node = y;
+      y = y.parent;
+    }
+    return y;
+  }
+
   del(key: K): V {
     if (this.root) {
       return this.delRecursive(this.root, key);
@@ -298,7 +315,7 @@ insertElementsInTree(myBST, elements);
  */
 
 //myBST.print();
-myBST.deleteMin();
-console.log(myBST.min());
+//myBST.deleteMin();
+//console.log(myBST.has(1));
 
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map
