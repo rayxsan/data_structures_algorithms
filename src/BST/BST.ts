@@ -72,7 +72,7 @@ export class BST<K, V> {
       return node;
     } else {
       const cmpResult = this.cmp(node.key, root.key);
-      console.log(`cmp(${node.key}, ${root.key}) = ${cmpResult}`);
+      //console.log(`cmp(${node.key}, ${root.key}) = ${cmpResult}`);
       if (cmpResult < 0) {
         node.parent = root;
         node.left = this.putRecursive(root.left, node);
@@ -82,8 +82,8 @@ export class BST<K, V> {
       } else {
         root.value = node.value;
       }
-      root.nodesCount =
-        this.sizeNode(root.left) + this.sizeNode(root.right) + 1;
+      node.nodesCount =
+        this.sizeNode(node.left) + this.sizeNode(node.right) + 1;
 
       return root;
     }
@@ -92,6 +92,29 @@ export class BST<K, V> {
   put(key: K, value: V) {
     const node = new BSTNode(key, value, null);
     this.root = this.putRecursive(this.root, node);
+  }
+
+  private insertion(root: BSTNode<K, V> | null, node: BSTNode<K, V>) {
+    let y = null;
+    while (root !== null) {
+      y = root;
+      if (node.key < root.key) {
+        root = root.left;
+      } else {
+        root = root.right;
+      }
+    }
+    y = node.parent;
+    if (y === null) {
+      root = node;
+    } else if (node.key < y.key) {
+      y.left = node;
+    } else y.right = node;
+  }
+
+  insert(key: K, value: V) {
+    const node = new BSTNode(key, value, null);
+    this.insertion(this.root, node);
   }
 
   private hasRecursive(node: BSTNode<K, V> | null, key: K): boolean {
@@ -176,12 +199,12 @@ export class BST<K, V> {
 
   successor(node: BSTNode<K, V>) {
     if (node.right) return this.minRecursive(node.right);
-    let y = node.parent;
-    while (y && node === y.right) {
-      node = y;
-      y = y.parent;
+    let parent = node.parent;
+    while (parent && node === parent.right) {
+      node = parent;
+      parent = parent.parent;
     }
-    return y;
+    return parent;
   }
 
   del(key: K): V {
@@ -288,7 +311,7 @@ function insertElementsInTreeRecursive(
     const mid = Math.floor(lo + (hi - lo) / 2);
 
     const elem = elements[mid];
-    tree.put(elem.key, elem.value);
+    tree.insert(elem.key, elem.value);
 
     insertElementsInTreeRecursive(tree, elements, lo, mid);
     insertElementsInTreeRecursive(tree, elements, mid + 1, hi);
@@ -314,7 +337,7 @@ insertElementsInTree(myBST, elements);
  *   1   3  5   7
  */
 
-//myBST.print();
+myBST.print();
 //myBST.deleteMin();
 //console.log(myBST.has(1));
 
