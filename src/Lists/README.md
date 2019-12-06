@@ -11,4 +11,7 @@ Double linked-list with the following operations
 
 Single linked-list with the following operations
 
--
+- isEmpty O(1)
+- insertFirst O(1)
+- deleteFirst O(1)
+- getFirst O(1)
