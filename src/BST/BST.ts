@@ -10,13 +10,13 @@ class BSTNode<K, V> {
   right: BSTNode<K, V> | null;
   parent: BSTNode<K, V> | null;
 
-  constructor(key: K, value: V, parent: BSTNode<K, V> | null) {
+  constructor(key: K, value: V, nodesCount: number) {
     this.key = key;
     this.value = value;
-    this.nodesCount = 1;
+    this.nodesCount = nodesCount;
     this.left = null;
     this.right = null;
-    this.parent = parent;
+    this.parent = null;
   }
 }
 
@@ -32,8 +32,6 @@ export class BST<K, V> {
 
   constructor(cmp: (x: K, y: K) => number) {
     this.root = null;
-    //this.root.left = null;
-    //this.root.right = null;
     this.cmp = cmp;
   }
 
@@ -65,57 +63,56 @@ export class BST<K, V> {
   }
 
   private putRecursive(
-    root: BSTNode<K, V> | null,
-    node: BSTNode<K, V>
+    node: BSTNode<K, V> | null,
+    key: K,
+    value: V
   ): BSTNode<K, V> {
-    if (root == null) {
-      return node;
+    let parent: BSTNode<K, V> | null = null;
+    if (node === null) {
+      return new BSTNode(key, value, 1);
     } else {
-      const cmpResult = this.cmp(node.key, root.key);
-      //console.log(`cmp(${node.key}, ${root.key}) = ${cmpResult}`);
+      const cmpResult = this.cmp(key, node.key);
+      parent = node;
       if (cmpResult < 0) {
-        node.parent = root;
-        node.left = this.putRecursive(root.left, node);
+        node.left = this.putRecursive(node.left, key, value);
       } else if (cmpResult > 0) {
-        node.parent = root;
-        node.right = this.putRecursive(root.right, node);
+        node.right = this.putRecursive(node.right, key, value);
       } else {
-        root.value = node.value;
+        node.value = value;
       }
       node.nodesCount =
         this.sizeNode(node.left) + this.sizeNode(node.right) + 1;
 
-      return root;
+      return node;
     }
   }
 
   put(key: K, value: V) {
-    const node = new BSTNode(key, value, null);
-    this.root = this.putRecursive(this.root, node);
+    this.root = this.putRecursive(this.root, key, value);
   }
 
-  private insertion(root: BSTNode<K, V> | null, node: BSTNode<K, V>) {
-    let y = null;
-    while (root !== null) {
-      y = root;
-      if (node.key < root.key) {
-        root = root.left;
-      } else {
-        root = root.right;
-      }
-    }
-    y = node.parent;
-    if (y === null) {
-      root = node;
-    } else if (node.key < y.key) {
-      y.left = node;
-    } else y.right = node;
-  }
+  // private insertion(root: BSTNode<K, V> | null, node: BSTNode<K, V>) {
+  //   let y = null;
+  //   while (root !== null) {
+  //     y = root;
+  //     if (node.key < root.key) {
+  //       root = root.left;
+  //     } else {
+  //       root = root.right;
+  //     }
+  //   }
+  //   y = node.parent;
+  //   if (y === null) {
+  //     root = node;
+  //   } else if (node.key < y.key) {
+  //     y.left = node;
+  //   } else y.right = node;
+  // }
 
-  insert(key: K, value: V) {
-    const node = new BSTNode(key, value, null);
-    this.insertion(this.root, node);
-  }
+  // insert(key: K, value: V) {
+  //   const node = new BSTNode(key, value, null);
+  //   this.insertion(this.root, node);
+  // }
 
   private hasRecursive(node: BSTNode<K, V> | null, key: K): boolean {
     if (node) {
@@ -311,7 +308,7 @@ function insertElementsInTreeRecursive(
     const mid = Math.floor(lo + (hi - lo) / 2);
 
     const elem = elements[mid];
-    tree.insert(elem.key, elem.value);
+    tree.put(elem.key, elem.value);
 
     insertElementsInTreeRecursive(tree, elements, lo, mid);
     insertElementsInTreeRecursive(tree, elements, mid + 1, hi);
