@@ -47,7 +47,7 @@ describe("BST", () => {
 
   test("Check size of a BST", () => {
     const myBST = new BST<number, string>(cmpF);
-    expect(() => myBST.size()).toThrowError("Is empty");
+    expect(myBST.getSize()).toEqual(0);
   });
 
   test("inserting values", () => {
@@ -55,7 +55,7 @@ describe("BST", () => {
     for (let element of elements) {
       myBST.put(element.key, element.value);
     }
-    expect(myBST.size()).toEqual(elements.length);
+    expect(myBST.getSize()).toEqual(elements.length);
   });
 
   test("getting values", () => {
@@ -69,21 +69,7 @@ describe("BST", () => {
     }
   });
 
-  test("deleting values in tree", () => {
-    const myBST = new BST<number, string>(cmpF);
-
-    for (let element of elements) {
-      myBST.put(element.key, element.value);
-    }
-
-    let itemCount = elements.length;
-    for (let element of elements) {
-      const value = myBST.del(element.key);
-      console.log("delete-value", value, "element-value", element.value);
-      expect(value).toEqual(element.value);
-      expect(myBST.size()).toEqual(itemCount--);
-    }
-  });
+  test.todo("deleting values in tree");
 
   test("Has values in key?", () => {
     const myBST = new BST<number, string>(cmpF);
@@ -105,17 +91,5 @@ describe("BST", () => {
         const result = myBST.has(obj.key);
         expect(result).toEqual(obj.shouldBeInTree);
       });
-  });
-
-  test("Min", () => {
-    const myBST = new BST<number, string>(cmpF);
-
-    for (let element of elements) {
-      myBST.put(element.key, element.value);
-    }
-    for (let element of elements) {
-      myBST.deleteMin();
-      expect(myBST.has(element.key)).toBeFalsy();
-    }
   });
 });
