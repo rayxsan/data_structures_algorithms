@@ -1,0 +1,74 @@
+/\*\* \*
+
+- { key -> value }
+-
+- Tree needs key to be comparable
+-
+- key1.compare(key2)
+- compare(key1, key2)
+-
+- insert, lookup, delete O(lg(N)) where N is the # of elements in the tree
+-
+- Hash Table
+-
+- [ 0 | 1 | 2 | ... | N -2 | N - 1 ] // array of size N
+- { key -> value }
+- The array also keeps a mapping from Integers to values, where the integer is the index of the value
+-
+- Array: T[] { index: number -> value: T }
+-
+- { index: (hash(key): number) -> value: T}
+-
+- index = hash(key) % array.len;
+-
+- { person_ssn -> person }
+-
+- put(person_ssd, person) {
+- if (load_factor >= 1) {
+-        grow_hash_table();
+- }
+- index = hash(person_ssd) % array.len;
+- array[index].append(person);
+- }
+-
+- find(key) {
+- idx = hash(key) % array.len;
+- list = array[idx];
+- for elem in list {
+-      if elem.key == key {
+-         return elem;
+-      }
+- }
+- return null;
+- }
+-
+- delete(key) {
+- idx = hash(key) % array.len;
+- list = array[idx];
+- list.delete((elem) => elem.key == key);
+- }
+-
+- 1 % 5 = 1
+- 2 % 5 = 2
+- 5 % 5 = 0
+-
+- [ 0 | 1 | 2 | ... | N -2 | N - 1 ]
+- | | | | |
+-       P
+-       |
+-       P
+-
+-
+- load_factor = N / array.len
+-
+- if (load_factor) >= 1 {
+-
+- }
+-
+- JS implementation of a hash table (a.k.a Map)
+- https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map
+-
+- const o = {};
+- o["name"] = "my name";
+- o.last_name = "garcia";
+- \*/
