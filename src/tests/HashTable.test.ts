@@ -37,7 +37,8 @@ describe("HashTable", () => {
 
     for (let i = 0; i < elements.length; i++) {
       myHashT.put(elements[i].key, elements[i].value);
-      expect(myHashT.get(elements[i].key)).toBe(elements[i].value);
+      console.log(elements[i].key);
+      expect(myHashT.get(elements[i].key)).toEqual(elements[i].value);
     }
   });
 });

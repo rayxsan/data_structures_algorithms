@@ -23,13 +23,15 @@ export class SeparateChainingHashST<K, V> {
   put(key: K, value: V) {
     const hashCode = hash<K>(key);
     const wrapper: KeyValueWrapper<K, V> = {
+      hash: hashCode,
       key: key,
-      value: value,
-      hash: hashCode
+      value: value
     };
     const idx = hashCode % this.capacity;
     const list = this.table[idx];
-    list.insertFirst(wrapper);
+    if (list) {
+      list.insertFirst(wrapper);
+    }
     this.size += 1;
   }
 
@@ -37,9 +39,19 @@ export class SeparateChainingHashST<K, V> {
     const hashCode = hash<K>(key);
     const idx = hashCode % this.capacity;
     const list = this.table[idx];
-    for (let wrapper of list) {
-      if (wrapper.key === key) {
-        return wrapper.value;
+    /*if (list) {
+      list.forEach(elem => {
+        if (elem.key === key) {
+          result = elem.value;
+        } else result = null;
+        return result;
+      });
+    }*/
+    if (list) {
+      for (let elem of list) {
+        if (elem.key === key) {
+          return elem.value;
+        }
       }
     }
     return null;
