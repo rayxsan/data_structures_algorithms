@@ -35,5 +35,6 @@ describe("HashTable", () => {
       myHashT.put(elements[i].key, elements[i].value);
       expect(myHashT.get(elements[i].key)).toEqual(elements[i].value);
     }
+    expect(myHashT.get(3)).toEqual("c");
   });
 });
