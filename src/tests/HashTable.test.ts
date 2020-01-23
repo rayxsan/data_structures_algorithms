@@ -26,6 +26,7 @@ describe("HashTable", () => {
       myHashT.put(elements[i].key, elements[i].value);
       expect(myHashT.getSize()).toBe(i + 1);
     }
+    expect(myHashT.getCapacity()).toEqual(8);
   });
 
   test("Get elem", () => {

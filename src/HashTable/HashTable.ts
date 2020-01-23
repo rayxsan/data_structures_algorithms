@@ -23,12 +23,16 @@ export class SeparateChainingHashST<K, V> {
   }
 
   put(key: K, value: V) {
+    const loadFactor = this.size / this.capacity;
     const hashCode = hash<K>(key);
     const wrapper: KeyValueWrapper<K, V> = {
       hash: hashCode,
       key: key,
       value: value
     };
+    if (loadFactor > 1) {
+      this.growTable();
+    }
     const idx = hashCode % this.capacity;
     this.table[idx] = this.myList;
     this.table[idx].insertFirst(wrapper);
@@ -40,14 +44,6 @@ export class SeparateChainingHashST<K, V> {
     const hashCode = hash<K>(key);
     const idx = hashCode % this.capacity;
     const list = this.table[idx];
-    /*if (list) {
-      list.forEach(elem => {
-        if (elem.key === key) {
-          result = elem.value;
-        } else result = null;
-        return result;
-      });
-    }*/
     if (list) {
       for (let elem of list) {
         if (elem.key === key) {
@@ -64,5 +60,27 @@ export class SeparateChainingHashST<K, V> {
 
   getCapacity() {
     return this.capacity;
+  }
+
+  private growTable() {
+    /*Need to create a new Array with double capacity
+    Copy elements of old array into new one (need to use wrapper.hash to calculate
+    new idx)*/
+    const newCapacity = this.capacity * 2;
+    let tempList: List<KeyValueWrapper<K, V>>;
+    let tempArr: Array<List<KeyValueWrapper<K, V>>>;
+
+    for (let i = 0; i < this.capacity; i++) {
+      const list = this.table[i];
+      if (list) {
+        list.forEach(wrapper => {
+          const newIdx = wrapper.hash % newCapacity;
+          tempArr[newIdx] = tempList;
+          tempArr[newIdx].insertFirst(wrapper);
+        });
+      }
+    }
+    this.capacity = newCapacity;
+    this.table = tempArr;
   }
 }
