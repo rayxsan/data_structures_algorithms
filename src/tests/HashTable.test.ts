@@ -26,7 +26,6 @@ describe("HashTable", () => {
       myHashT.put(elements[i].key, elements[i].value);
       expect(myHashT.getSize()).toBe(i + 1);
     }
-    expect(myHashT.getCapacity()).toEqual(8);
   });
 
   test("Get elem", () => {
@@ -37,5 +36,19 @@ describe("HashTable", () => {
       expect(myHashT.get(elements[i].key)).toEqual(elements[i].value);
     }
     expect(myHashT.get(3)).toEqual("c");
+  });
+
+  test("Grow Table", () => {
+    const myHashT = new SeparateChainingHashST<number, string>();
+    for (let i = 0; i < elements.length; i++) {
+      const loadFactor = myHashT.getSize() / myHashT.getCapacity();
+      myHashT.put(elements[i].key, elements[i].value);
+      console.log(loadFactor, myHashT.getCapacity());
+      if (loadFactor > 1) {
+        expect(myHashT.getCapacity()).toEqual(8);
+      } else {
+        expect(myHashT.getCapacity()).toEqual(4);
+      }
+    }
   });
 });
