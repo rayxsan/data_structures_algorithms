@@ -41,14 +41,18 @@ describe("HashTable", () => {
   test("Grow Table", () => {
     const myHashT = new SeparateChainingHashST<number, string>();
     for (let i = 0; i < elements.length; i++) {
-      const loadFactor = myHashT.getSize() / myHashT.getCapacity();
+      const oldCapacity = myHashT.getCapacity();
       myHashT.put(elements[i].key, elements[i].value);
-      console.log(loadFactor, myHashT.getCapacity());
-      if (loadFactor > 1) {
+      const loadFactor = myHashT.getSize() / myHashT.getCapacity();
+
+      console.log(loadFactor, myHashT.getCapacity(), oldCapacity);
+
+      /*if (loadFactor > 1) {
         expect(myHashT.getCapacity()).toEqual(8);
       } else {
-        expect(myHashT.getCapacity()).toEqual(4);
-      }
+        expect(myHashT.getCapacity()).toEqual(oldCapacity);
+      }*/
     }
+    expect(myHashT.getCapacity()).toEqual(8);
   });
 });
