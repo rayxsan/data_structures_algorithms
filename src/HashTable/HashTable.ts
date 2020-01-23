@@ -31,7 +31,7 @@ export class SeparateChainingHashST<K, V> {
       value: value
     };
     if (loadFactor > 1) {
-      this.growTable();
+      this.growTable(); //grow and then inserting new values.
     }
     const idx = hashCode % this.capacity;
     this.table[idx] = this.myList;
@@ -67,7 +67,7 @@ export class SeparateChainingHashST<K, V> {
     Copy elements of old array into new one (need to use wrapper.hash to calculate
     new idx)*/
     const newCapacity = this.capacity * 2;
-    let tempList: List<KeyValueWrapper<K, V>>;
+    let tempList: List<KeyValueWrapper<K, V>>; //can i use myList instead of a new one?
     let tempArr: Array<List<KeyValueWrapper<K, V>>>;
 
     for (let i = 0; i < this.capacity; i++) {
@@ -75,7 +75,7 @@ export class SeparateChainingHashST<K, V> {
       if (list) {
         list.forEach(wrapper => {
           const newIdx = wrapper.hash % newCapacity;
-          tempArr[newIdx] = tempList;
+          tempArr[newIdx] = tempList; //is this needed?
           tempArr[newIdx].insertFirst(wrapper);
         });
       }
