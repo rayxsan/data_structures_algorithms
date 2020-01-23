@@ -30,7 +30,7 @@ export class SeparateChainingHashST<K, V> {
       key: key,
       value: value
     };
-    if (loadFactor >= 1) {
+    if (loadFactor > 1) {
       this.growTable(); //grow and then inserting new values.
     }
     const idx = hashCode % this.capacity;
