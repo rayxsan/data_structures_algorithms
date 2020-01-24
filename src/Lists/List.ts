@@ -68,7 +68,21 @@ class List<T> {
       this.remove(this.sentinel.prev);
     }
   }
+  delete(value: T) {
+    if (this.isEmpty()) {
+      throw new Error("List is Empty");
+    }
 
+    for (let itr = this.sentinel.next; itr != this.sentinel; ) {
+      if (itr) {
+        if (itr.value === value) {
+          this.remove(itr);
+          break;
+        }
+        itr = itr.next;
+      }
+    }
+  }
   getFirst() {
     if (!this.isEmpty() && this.sentinel.next) {
       return this.sentinel.next.value;
