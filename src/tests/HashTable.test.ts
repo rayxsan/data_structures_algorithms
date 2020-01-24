@@ -49,8 +49,11 @@ describe("HashTable", () => {
 
   test("Deleting a Key entry", () => {
     const myHashT = new SeparateChainingHashST<number, string>();
-    myHashT.put(1, "a");
+    for (let i = 0; i < elements.length; i++) {
+      myHashT.put(elements[i].key, elements[i].value);
+    }
     expect(myHashT.delete(1)).toBeTruthy;
+    expect(myHashT.delete(10)).toBeFalsy;
     expect(myHashT.get(1)).toBeNull;
   });
 });
