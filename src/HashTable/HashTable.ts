@@ -83,4 +83,16 @@ export class SeparateChainingHashST<K, V> {
     this.capacity = newCapacity;
     this.table = tempArr;
   }
+
+  delete(key: K): boolean {
+    const idx = hash(key) % this.capacity;
+    const list = this.table[idx];
+    for (let wrapper of list) {
+      if (wrapper.key === key) {
+        list.delete(wrapper);
+        return true;
+      }
+    }
+    return false;
+  }
 }
