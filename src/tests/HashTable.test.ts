@@ -36,6 +36,7 @@ describe("HashTable", () => {
       expect(myHashT.get(elements[i].key)).toEqual(elements[i].value);
     }
     expect(myHashT.get(3)).toEqual("c");
+    expect(myHashT.get(10)).toBeNull;
   });
 
   test("Grow Table", () => {
