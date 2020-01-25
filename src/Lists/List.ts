@@ -72,8 +72,9 @@ class List<T> {
     if (this.isEmpty()) {
       throw new Error("List is Empty");
     }
-
-    for (let itr = this.sentinel.next; itr != this.sentinel; ) {
+    const node = new ListNode(value);
+    this.remove(node);
+    /*  for (let itr = this.sentinel.next; itr != this.sentinel; ) {
       if (itr) {
         if (itr.value === value) {
           this.remove(itr);
@@ -81,7 +82,7 @@ class List<T> {
         }
         itr = itr.next;
       }
-    }
+    } */
   }
   getFirst() {
     if (!this.isEmpty() && this.sentinel.next) {

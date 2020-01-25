@@ -90,6 +90,7 @@ export class SeparateChainingHashST<K, V> {
     for (let wrapper of list) {
       if (wrapper.key === key) {
         list.delete(wrapper);
+        this.size--;
         return true;
       }
     }
