@@ -22,7 +22,7 @@ describe("Sets", () => {
       mySet.add(i);
       expect(mySet.has(i)).toBeTruthy;
     }
-    expect(mySet.has(34)).toBeFalsy; // this should fail
+    expect(mySet.has(2)).toBeFalsy; // this should fail, this expression is true
   });
 
   test.todo("clear");

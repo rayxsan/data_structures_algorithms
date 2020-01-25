@@ -1,6 +1,5 @@
 import List from "../Lists/List";
 import hash from "../utils/Hashing";
-import { runInThisContext } from "vm";
 
 const defaultInitialCapacity = 4;
 
