@@ -8,18 +8,16 @@ interface KeyValueWrapper<K, V> {
   key: K;
   value: V;
 }
-// TODO(raymel): fix this hash table. Use Set as an example!
+
 export class SeparateChainingHashST<K, V> {
   private capacity: number;
   private size: number;
-  private myList: List<KeyValueWrapper<K, V>>;
   private table: Array<List<KeyValueWrapper<K, V>>>;
 
   constructor(initialCapacity: number = defaultInitialCapacity) {
     this.capacity = Math.max(defaultInitialCapacity, initialCapacity);
     this.size = 0;
-    this.table = [];
-    this.myList = new List();
+    this.table = new Array<List<KeyValueWrapper<K, V>>>(this.capacity);
   }
 
   put(key: K, value: V) {
@@ -33,8 +31,11 @@ export class SeparateChainingHashST<K, V> {
     if (loadFactor > 1) {
       this.growTable(); //grow and then inserting new values.
     }
+
     const idx = hashCode % this.capacity;
-    this.table[idx] = this.myList;
+    if (this.table[idx] === undefined) {
+      this.table[idx] = new List();
+    }
     this.table[idx].insertFirst(wrapper);
 
     this.size += 1;
@@ -63,19 +64,17 @@ export class SeparateChainingHashST<K, V> {
   }
 
   private growTable() {
-    /*Need to create a new Array with double capacity
-    Copy elements of old array into new one (need to use wrapper.hash to calculate
-    new idx)*/
     const newCapacity = this.capacity * 2;
-
-    const tempArr = new Array<List<KeyValueWrapper<K, V>>>();
+    const tempArr = new Array<List<KeyValueWrapper<K, V>>>(newCapacity);
 
     for (let i = 0; i < this.capacity; i++) {
       const list = this.table[i];
       if (list) {
         list.forEach(wrapper => {
           const newIdx = wrapper.hash % newCapacity;
-          tempArr[newIdx] = this.myList;
+          if (tempArr[newIdx] === undefined) {
+            tempArr[newIdx] = new List();
+          }
           tempArr[newIdx].insertFirst(wrapper);
         });
       }
