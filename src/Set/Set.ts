@@ -9,16 +9,17 @@ interface ValueWrapper<T> {
 }
 
 class Set<T> {
-  private set: Array<List<ValueWrapper<T>>>;
-  private setList: List<ValueWrapper<T>>;
+  private buckets: Array<List<ValueWrapper<T>>>;
   private size: number;
   private capacity: number;
+  private growCnt: number;
 
+  // TODO(raymel): take as input a function that knows how to hash T and how to T1 === T2
   constructor(initialCapacity: number = defaultInitialCapacity) {
     this.capacity = Math.max(defaultInitialCapacity, initialCapacity);
     this.size = 0;
-    this.set = [];
-    this.setList = new List();
+    this.buckets = new Array<List<ValueWrapper<T>>>(initialCapacity);
+    this.growCnt = 0;
   }
 
   private compare(x: T, y: T): boolean {
@@ -27,21 +28,24 @@ class Set<T> {
 
   private growSet() {
     const newCapacity = this.capacity * 2;
-    const tempArr = new Array<List<ValueWrapper<T>>>();
+    const newBuckets = new Array<List<ValueWrapper<T>>>(newCapacity);
 
     for (let i = 0; i < this.capacity; i++) {
-      const list = this.set[i];
-      if (List) {
+      const list = this.buckets[i];
+      if (list) {
         list.forEach(wrapper => {
           const newIdx = wrapper.hash % newCapacity;
-          tempArr[newIdx] = new List();
-          tempArr[newIdx].insertLast(wrapper);
+          if (newBuckets[newIdx] === undefined) {
+            newBuckets[newIdx] = new List();
+          }
+          newBuckets[newIdx].insertLast(wrapper);
         });
       }
     }
 
     this.capacity = newCapacity;
-    this.set = tempArr;
+    this.buckets = newBuckets;
+    this.growCnt += 1;
   }
 
   getCapacity() {
@@ -65,14 +69,18 @@ class Set<T> {
     }
 
     const idx = hashCode % this.capacity;
-    this.set[idx] = this.setList;
+    if (this.buckets[idx] === undefined) {
+      this.buckets[idx] = new List();
+    }
 
-    for (let elements of this.set[idx]) {
+    for (let elements of this.buckets[idx]) {
       if (this.compare(wrapper.value, elements.value)) {
-        throw new Error("Duplicate entry");
+        // if we find the element on the set, we don't do anything
+        return this;
       }
     }
-    this.set[idx].insertLast(wrapper);
+
+    this.buckets[idx].insertLast(wrapper);
     this.size++;
 
     return this;
@@ -82,19 +90,15 @@ class Set<T> {
    * The delete() method removes the specified element from a Set object.
    * @param value     The value of the element to remove from the Set object.
    */
-  delete(value: T) {}
+  delete(value: T): boolean {
+    const idx = hash(value) % this.capacity;
+    const list = this.buckets[idx];
 
-  /**
-   * The has() method returns a boolean indicating whether an element with the specified value exists in a Set object or not.
-   * @param value The value to test for presence in the Set object.
-   */
-  has(value: T): boolean {
-    const hashCode = hash(value);
-    const idx = hashCode % this.capacity;
-    this.set[idx] = new List();
-    if (List) {
-      for (let wrapper of this.set[idx]) {
+    if (list) {
+      for (let wrapper of list) {
         if (wrapper.value === value) {
+          list.delete(wrapper);
+          this.size--;
           return true;
         }
       }
@@ -103,9 +107,37 @@ class Set<T> {
   }
 
   /**
+   * The has() method returns a boolean indicating whether an element with the specified value exists in a Set object or not.
+   * @param value The value to test for presence in the Set object.
+   */
+  has(value: T): boolean {
+    const hashCode = hash(value);
+    const idx = hashCode % this.capacity;
+    const list = this.buckets[idx];
+    let result = false;
+
+    if (list) {
+      for (let wrapper of list) {
+        if (wrapper.value === value) {
+          result = true;
+          break;
+        }
+      }
+    }
+
+    console.log("Set.has", hashCode, idx, result);
+    return result;
+  }
+
+  /**
    * The clear() method removes all elements from a Set object.
    */
-  clear() {}
+  clear() {
+    this.buckets = new Array<List<ValueWrapper<T>>>(defaultInitialCapacity);
+    this.capacity = defaultInitialCapacity;
+    this.size = 0;
+    this.growCnt = 0;
+  }
 
   /**
    * returns the number of (unique) elements in a Set
@@ -118,9 +150,45 @@ class Set<T> {
    * The forEach() method executes a provided function once for each value in the Set object, in insertion order.
    * @param cb Function to execute for each element
    */
-  forEach(cb: (value: T) => void) {}
+  forEach(cb: (value: T) => void) {
+    for (let i = 0; i < this.capacity; i++) {
+      const list = this.buckets[i];
+      if (list) {
+        for (let wrapper of list) {
+          cb(wrapper.value);
+        }
+      }
+    }
+  }
 
-  *[Symbol.iterator]() {}
+  *[Symbol.iterator]() {
+    for (let i = 0; i < this.capacity; i++) {
+      const list = this.buckets[i];
+      if (list) {
+        for (let wrapper of list) {
+          yield wrapper.value;
+        }
+      }
+    }
+  }
+
+  printDebug() {
+    console.log(
+      `Set size: ${this.size} cap: ${this.capacity} grown: ${this.growCnt}`
+    );
+    for (let i = 0; i < this.capacity; i++) {
+      let line = "  " + i.toString() + ": ";
+      const list = this.buckets[i];
+      if (list === undefined) {
+        line += "undefined";
+      } else {
+        for (let wrapper of list) {
+          line += wrapper.value + " ";
+        }
+      }
+      console.log(line);
+    }
+  }
 }
 
 export default Set;
