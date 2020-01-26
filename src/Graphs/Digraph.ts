@@ -101,11 +101,3 @@ class Digraph {
 }
 
 export default Digraph;
-
-const dig = new Digraph(3);
-
-dig.addEdge(0, 1);
-dig.addEdge(1, 2);
-dig.addEdge(1, 3);
-
-console.log(dig.toDOT());
