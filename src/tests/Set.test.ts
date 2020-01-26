@@ -1,8 +1,14 @@
 import Set from "../Set/Set";
 
 describe("Sets", () => {
+  const compFn = (x: number, y: number) => {
+    return x === y;
+  };
+  const compFs = (x: string, y: string) => {
+    return x === y;
+  };
   test("add", () => {
-    const mySet = new Set();
+    const mySet = new Set<number>(compFn);
     for (let i = 1; i <= 4; i++) {
       mySet.add(i);
       expect(mySet.getSize()).toEqual(i);
@@ -17,7 +23,7 @@ describe("Sets", () => {
   test.todo("delete");
 
   test("has", () => {
-    const mySet = new Set();
+    const mySet = new Set<number>(compFn);
     for (let i = 0; i < 6; i++) {
       mySet.add(i);
       expect(mySet.has(i)).toBe(true);
@@ -26,7 +32,7 @@ describe("Sets", () => {
   });
 
   test("clear", () => {
-    const mySet = new Set<string>();
+    const mySet = new Set<string>(compFs);
     expect(mySet.getSize()).toBe(0);
 
     mySet
@@ -45,7 +51,7 @@ describe("Sets", () => {
   });
 
   test("getSize", () => {
-    const mySet = new Set();
+    const mySet = new Set(compFn);
     for (let i = 0; i < 14; i++) {
       mySet.add(i);
       expect(mySet.getSize()).toEqual(i + 1);
@@ -53,7 +59,7 @@ describe("Sets", () => {
   });
 
   test("forEach", () => {
-    const mySet = new Set<string>();
+    const mySet = new Set<string>(compFs);
     mySet
       .add("a")
       .add("b")
@@ -73,7 +79,7 @@ describe("Sets", () => {
   });
 
   test("iterator", () => {
-    const mySet = new Set<number>();
+    const mySet = new Set<number>(compFn);
     const n = 10;
     const counters = new Array<number>(n);
 

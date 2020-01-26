@@ -13,17 +13,22 @@ class Set<T> {
   private size: number;
   private capacity: number;
   private growCnt: number;
+  private compF: (x: T, y: T) => boolean;
 
   // TODO(raymel): take as input a function that knows how to hash T and how to T1 === T2
-  constructor(initialCapacity: number = defaultInitialCapacity) {
+  constructor(
+    compF: (x: T, y: T) => boolean,
+    initialCapacity: number = defaultInitialCapacity
+  ) {
     this.capacity = Math.max(defaultInitialCapacity, initialCapacity);
+    this.compF = compF;
     this.size = 0;
     this.buckets = new Array<List<ValueWrapper<T>>>(initialCapacity);
     this.growCnt = 0;
   }
 
   private compare(x: T, y: T): boolean {
-    return x === y;
+    return this.compF(x, y);
   }
 
   private growSet() {
