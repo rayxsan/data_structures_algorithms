@@ -1,24 +1,46 @@
+import { Edge, makeEdge } from "./Edge";
+import List from "../Lists/List";
+
 class Vertex {
-  private adjacencyList;
+  private adjacentList: List<[number, Edge]>;
+  private label: string;
+  private adjCnt: number;
 
   /**
    * Creates a new vexter for a graph
    */
-  constructor() {}
-
-  addEdge(idx: number, weight = 1) {}
-
-  /**
-   * Return the number of adjacent vertes (a.k.a neighbors)
-   */
-  neighbors(): number {
-    return 0;
+  constructor(label: string = "") {
+    this.label = label;
+    this.adjacentList = new List<[number, Edge]>();
+    this.adjCnt = 0;
   }
 
   /**
-   * Iterate over all adjacent vertices
+   * Add adjacent vertex using its index
+   *
+   * @param idx vertex index
+   * @param edge edge metadata
    */
-  *[Symbol.iterator]() {}
+  addEdge(idx: number, edge: Edge) {
+    this.adjacentList.insertFirst([idx, edge]);
+    this.adjCnt++;
+  }
+
+  /**
+   * Return the number of adjacent vertices (a.k.a neighbors)
+   */
+  neighbors(): number {
+    return this.adjCnt;
+  }
+
+  /**
+   * Iterate over all adjacent vertices indices
+   */
+  *[Symbol.iterator]() {
+    for (let elem of this.adjacentList) {
+      yield elem[0];
+    }
+  }
 
   /**
    * Returns a string representation of the vertex
