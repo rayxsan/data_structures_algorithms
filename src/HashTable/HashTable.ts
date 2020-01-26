@@ -8,7 +8,7 @@ interface KeyValueWrapper<K, V> {
   key: K;
   value: V;
 }
-
+// TODO(raymel): fix this hash table. Use Set as an example!
 export class SeparateChainingHashST<K, V> {
   private capacity: number;
   private size: number;
