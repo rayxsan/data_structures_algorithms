@@ -61,3 +61,17 @@ https://en.wikipedia.org/wiki/DOT_(graph_description_language)
 ## Visualizing graphs
 
 There are many programs that can parse and depict a graph that is described in DOT. One such program can be found [here](https://dreampuf.github.io/GraphvizOnline/)
+
+## Depth First Search
+
+The classic recursive method for
+searching in a connected graph (visiting all
+of its vertices and edges) mimics Tremaux
+maze exploration but is even simpler to de-
+scribe. To search a graph, invoke a recursive
+method that visits vertices. To visit a vertex:
+
+■ Mark it as having been visited.
+■ Visit (recursively) all the vertices that
+are adjacent to it and that have not
+yet been marked.
