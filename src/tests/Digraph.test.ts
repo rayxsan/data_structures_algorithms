@@ -19,8 +19,9 @@ describe("Digraph", () => {
     dig.addEdge(0, 1);
     dig.addEdge(1, 2);
     dig.addEdge(1, 3);
+    dig.addEdge(1, 4);
     expect(dig.toDOT()).toBe(
-      "digraph DiG { 0; 1; 2; 0 -> 1; 1 -> 3; 1 -> 2; }"
+      "digraph DiG { 0; 1; 2; 0 -> 1; 1 -> 4; 1 -> 3; 1 -> 2; }"
     );
   });
 });

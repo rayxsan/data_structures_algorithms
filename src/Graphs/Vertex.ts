@@ -7,7 +7,7 @@ class Vertex {
   private adjCnt: number;
 
   /**
-   * Creates a new vexter for a graph
+   * Creates a new vertex for a graph
    */
   constructor(label: string = "") {
     this.label = label;

@@ -1,12 +1,12 @@
 import Vertex from "./Vertex";
 import { Edge, makeEdge } from "./Edge";
+import Bag from "../Bags/Bag";
 import List from "../Lists/List";
 
 class Digraph {
   private vertices: Array<Vertex>;
   private vertexCount = 0;
   private edgeCount = 0;
-
   /**
    * Create a graph with @vertexCount vertices
    * @param vertexCount max number of vertices in the graph
@@ -54,12 +54,12 @@ class Digraph {
   }
 
   /**
-   * abj is a generator that yields Vertices adjacent to the vertex at index @idx
+   * adj is a generator that yields Vertices adjacent to the vertex at index @idx
    * @param idx vertex index
    */
   *adj(idx: number) {
     for (let adjVertexIdx of this.vertices[idx]) {
-      yield this.vertices[adjVertexIdx];
+      yield adjVertexIdx;
     }
   }
 
