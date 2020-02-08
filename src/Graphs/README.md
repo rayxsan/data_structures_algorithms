@@ -20,7 +20,7 @@ c  0  1  0  0
 d  0  1  0  0
 ```
 
-## Representing a graph a list of adjacent vertices
+## Representing a graph as list of adjacent vertices
 
 ```
 a -> b

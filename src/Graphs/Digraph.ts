@@ -34,12 +34,38 @@ class Digraph {
   }
 
   /**
+   * Returns a Vertex at index @idx
+   * @param idx index of the Vertex to be returned
+   */
+  getVertex(idx: number): Vertex {
+    if (idx < 0 || idx >= this.vertexCount) {
+      throw new Error("Invalid index");
+    }
+    return this.vertices[idx];
+  }
+
+  addDoubleEdge(
+    from: number,
+    to: number,
+    edge: Edge = { weight: 1, label: "" }
+  ) {
+    this.addEdge(from, to, edge);
+    this.addEdge(to, from, edge);
+  }
+
+  /**
    * Create a new edge connecting vertex at index @from to vertex at index @to
    *
    * @param from edge star
    * @param to edge end
    */
   addEdge(from: number, to: number, edge: Edge = { weight: 1, label: "" }) {
+    if (from < 0 || from >= this.vertexCount) {
+      throw new Error("Invalid from index");
+    }
+    if (to < 0 || to >= this.vertexCount) {
+      throw new Error("Invalid to index");
+    }
     this.vertices[from].addEdge(to, edge);
     this.edgeCount++;
   }
@@ -58,6 +84,9 @@ class Digraph {
    * @param idx vertex index
    */
   *adj(idx: number) {
+    if (idx < 0 || idx >= this.vertexCount) {
+      throw new Error("Invalid index");
+    }
     for (let adjVertexIdx of this.vertices[idx]) {
       yield adjVertexIdx;
     }

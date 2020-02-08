@@ -46,6 +46,7 @@ class Vertex {
    * Returns a string representation of the vertex
    */
   toString() {
+    // label(idx): (0, weight), ()
     return "TODO";
   }
 }

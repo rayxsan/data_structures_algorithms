@@ -2,19 +2,25 @@ import Digraph from "../Graphs/Digraph";
 import Vertex from "../Graphs/Vertex";
 
 class DepthFirstSearch {
-  private marked: boolean[]; //needs to be the same size of the # of vertices in the graph
+  private marked: boolean[];
   private countV: number;
   private G: Digraph;
   private source: number;
+  private fn: (vertex: Vertex, idx: number) => void;
 
-  constructor(G: Digraph, source: number) {
+  constructor(
+    G: Digraph,
+    source: number,
+    fn: (vertex: Vertex, idx: number) => void
+  ) {
+    if (source < 0 || source >= G.V()) {
+      throw new Error("Invalid source index");
+    }
     this.G = G;
     this.countV = 0;
     this.marked = new Array<boolean>(G.V());
-    // TODO: init array with false values
-
+    this.fn = fn;
     this.source = source;
-    // TODO: verify that source is a valid index in the graph G
     this.dfs(this.G, this.source);
   }
 
@@ -22,10 +28,10 @@ class DepthFirstSearch {
   private dfs(G: Digraph, vertexIdx: number) {
     this.marked[vertexIdx] = true;
     this.countV++;
+    this.fn(G.getVertex(vertexIdx), vertexIdx);
     //console.log("visiting vertex with index", vertexIdx);
 
     for (let w of this.G.adj(vertexIdx)) {
-      console.log(w);
       if (!this.marked[w]) {
         this.dfs(G, w);
       }
@@ -41,9 +47,4 @@ class DepthFirstSearch {
   }
 }
 
-const dig = new Digraph(3);
-dig.addEdge(0, 1);
-dig.addEdge(1, 2);
-dig.addEdge(1, 3);
-
-const dfs = new DepthFirstSearch(dig, 0);
+export default DepthFirstSearch;

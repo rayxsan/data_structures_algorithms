@@ -130,7 +130,7 @@ class Set<T> {
       }
     }
 
-    console.log("Set.has", hashCode, idx, result);
+    //console.log("Set.has", hashCode, idx, result);
     return result;
   }
 

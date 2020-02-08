@@ -4,16 +4,21 @@ import { Edge, makeEdge } from "../Graphs/Edge";
 describe("Vertex", () => {
   test("Add edge", () => {
     const myVertex = new Vertex("0");
+    const adjCount = 10;
 
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < adjCount; i++) {
       myVertex.addEdge(i, makeEdge(i, i.toString()));
       expect(myVertex.neighbors()).toBe(i + 1);
     }
 
-    //Stuck here
-    /* for (let ver in myVertex) {
-      console.log(ver);
-      expect(ver[0]).toBe("a");
-    } */
+    const map = new Map<number, number>();
+    for (let vertexIndex of myVertex) {
+      const cnt = map.get(vertexIndex) || 0;
+      map.set(vertexIndex, cnt + 1);
+    }
+    map.forEach((cnt, vertexIndex) => {
+      expect(cnt).toEqual(1);
+    });
+    expect(map.size).toEqual(adjCount);
   });
 });
