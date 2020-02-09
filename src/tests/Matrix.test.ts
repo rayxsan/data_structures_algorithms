@@ -64,8 +64,8 @@ describe("Matrix", () => {
 
   test.todo("equal");
 
-  /* test("toString", () => {
+  test("toString", () => {
     const i = IdentityMatrix(3);
     expect(i.toString()).toEqual("{{1, 0, 0}, {0, 1, 0}, {0, 0, 1}}");
-  }); */
+  });
 });

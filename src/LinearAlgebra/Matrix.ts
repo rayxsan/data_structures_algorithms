@@ -48,7 +48,15 @@ class Matrix {
   }
 
   toString(): string {
-    return "";
+    const header = "{";
+    const footer = "}, ";
+    let body = "";
+    for (let i = 0; i < this.rows.length; i++) {
+      body += header + this.rows[i].toString() + footer;
+    }
+    let result = header + body + "}";
+    result = result.replace("}, }", "}}");
+    return result;
   }
 }
 
@@ -83,8 +91,4 @@ const m = new Matrix([
 
 const iMatrix = IdentityMatrix(3);
 
-for (let i = 1; i <= 3; i++) {
-  for (let j = 1; j <= 3; j++) {
-    if (i === j) console.log(iMatrix.get(i, j));
-  }
-}
+console.log(iMatrix.toString());
