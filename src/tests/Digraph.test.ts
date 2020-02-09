@@ -20,15 +20,14 @@ describe("Digraph", () => {
     expect(dig.E()).toEqual(3);
   });
 
-  // TODO: Fix this test!
-  /* test("String representation of graph", () => {
+  test("String representation of graph", () => {
     const dig = new Digraph(5);
     dig.addEdge(0, 1);
     dig.addEdge(1, 2);
     dig.addEdge(1, 3);
     dig.addEdge(1, 4);
     expect(dig.toDOT()).toBe(
-      "digraph DiG { 0; 1; 2; 0 -> 1; 1 -> 4; 1 -> 3; 1 -> 2; }"
+      "digraph DiG { 0; 1; 2; 3; 4; 0 -> 1; 1 -> 4; 1 -> 3; 1 -> 2; }"
     );
-  }); */
+  });
 });
