@@ -31,8 +31,7 @@ class BreadthFirstSearch {
 
     while (!q.isEmpty()) {
       const v = q.dequeue();
-
-      for (let w of G.adj(vertexIdx)) {
+      for (let w of G.adj(v)) {
         if (!this.marked[w]) {
           this.edgeTo[w] = v;
           this.marked[w] = true;
@@ -50,7 +49,9 @@ class BreadthFirstSearch {
   }
 
   pathTo(idx: number) {
-    if (!this.hasPathTo(idx)) return null;
+    if (!this.hasPathTo(idx)) {
+      throw new Error("Path not found");
+    }
     let path = new Stack<number>();
     for (let x = idx; x != this.s; x = this.edgeTo[x]) {
       path.push(x);
