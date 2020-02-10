@@ -45,9 +45,9 @@ class Matrix {
   }
 
   equal(other: Matrix): boolean {
-    for (let i = 0; i < this.rows.length; i++) {
-      for (let j = 0; j < this.rows[i].length; j++) {
-        if (this.rows[i][j] !== other[i][j]) {
+    for (let i = 1; i <= this.rows.length; i++) {
+      for (let j = 1; j <= this.rows[i - 1].length; j++) {
+        if (this.rows[i - 1][j - 1] !== other.get(i, j)) {
           return false;
         }
       }
