@@ -62,7 +62,21 @@ describe("Matrix", () => {
     // TODO: try other matrices too
   });
 
-  test.todo("equal");
+  test("equal", () => {
+    const m = new Matrix([
+      [1, 2, 3],
+      [4, 5, 6],
+      [7, 8, 9]
+    ]);
+
+    const n = new Matrix([
+      [1, 2, 3],
+      [4, 5, 6],
+      [7, 8, 9]
+    ]);
+
+    expect(m.equal(n)).toBe(true);
+  });
 
   test("toString", () => {
     const i = IdentityMatrix(3);

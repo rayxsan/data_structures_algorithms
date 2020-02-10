@@ -3,6 +3,7 @@
 
 class Matrix {
   private rows: Array<Array<number>>;
+
   constructor(rows: Array<Array<number>>) {
     this.rows = rows;
   }
@@ -44,7 +45,14 @@ class Matrix {
   }
 
   equal(other: Matrix): boolean {
-    return false;
+    for (let i = 0; i < this.rows.length; i++) {
+      for (let j = 0; j < this.rows[i].length; j++) {
+        if (this.rows[i][j] !== other[i][j]) {
+          return false;
+        }
+      }
+    }
+    return true;
   }
 
   toString(): string {
@@ -55,7 +63,10 @@ class Matrix {
       body += header + this.rows[i].toString() + footer;
     }
     let result = header + body + "}";
-    result = result.replace("}, }", "}}");
+    result = result
+      .replace("}, }", "}}")
+      .replace(/,/g, ", ")
+      .replace(/},  /g, "}, ");
     return result;
   }
 }
@@ -82,13 +93,3 @@ export function IdentityMatrix(size: number): Matrix {
 }
 
 export default Matrix;
-
-const m = new Matrix([
-  [1, 2, 3],
-  [4, 5, 6],
-  [7, 8, 9]
-]);
-
-const iMatrix = IdentityMatrix(3);
-
-console.log(iMatrix.toString());
