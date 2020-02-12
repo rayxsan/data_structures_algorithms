@@ -25,7 +25,17 @@ class Matrix {
   }
 
   transpose(): Matrix {
-    return {} as Matrix;
+    const result = new Array<Array<number>>();
+    for (let i = 0; i < this.rows.length; i++) {
+      for (let j = 0; j < this.rows[i].length; j++) {
+        if (!result[j]) {
+          result[j] = [];
+        }
+        result[j][i] = this.rows[i][j];
+      }
+    }
+
+    return new Matrix(result);
   }
 
   determinant(): number {
@@ -33,15 +43,45 @@ class Matrix {
   }
 
   add(other: Matrix): Matrix {
-    return {} as Matrix;
+    const result = new Array<Array<number>>();
+
+    for (let i = 0; i < this.rows.length; i++) {
+      for (let j = 0; j < this.rows[i].length; j++) {
+        if (!result[i]) {
+          result[i] = [];
+        }
+        result[i][j] = this.rows[i][j] + other.get(i + 1, j + 1);
+      }
+    }
+    return new Matrix(result);
   }
 
   multiply(other: Matrix): Matrix {
-    return {} as Matrix;
+    const result = new Array<Array<number>>();
+
+    for (let i = 0; i < this.rows.length; i++) {
+      for (let j = 0; j < this.rows[i].length; j++) {
+        if (!result[i]) {
+          result[i] = [];
+        }
+        result[i][j] = this.rows[i][j] * other.get(i + 1, j + 1);
+      }
+    }
+    return new Matrix(result);
   }
 
   scalarProduct(alpha: number): Matrix {
-    return {} as Matrix;
+    const result = new Array<Array<number>>();
+
+    for (let i = 0; i < this.rows.length; i++) {
+      for (let j = 0; j < this.rows[i].length; j++) {
+        if (!result[i]) {
+          result[i] = [];
+        }
+        result[i][j] = alpha * this.rows[i][j];
+      }
+    }
+    return new Matrix(result);
   }
 
   equal(other: Matrix): boolean {
@@ -93,3 +133,11 @@ export function IdentityMatrix(size: number): Matrix {
 }
 
 export default Matrix;
+
+const m = new Matrix([
+  [9, 3, 5],
+  [-6, -9, 7],
+  [-1, -8, 1]
+]);
+
+//console.log(m.toString());

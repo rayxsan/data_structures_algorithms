@@ -42,14 +42,67 @@ describe("Matrix", () => {
     }
   });
 
-  test.todo("multiply");
+  test("multiply", () => {
+    const m = new Matrix([
+      [9, 3, 5],
+      [-6, -9, 7],
+      [-1, -8, 1]
+    ]);
+    const n = new Matrix([
+      [18, 6, 10],
+      [-12, -18, 14],
+      [-2, -16, 2]
+    ]);
+    expect(m.multiply(n).toString()).toEqual(
+      "{{116, -80, 142}, {-14, 14, -172}, {76, 122, -120}}"
+    );
+  });
+
   test.todo("multiply with identity");
 
-  test.todo("scalar product");
+  test("scalar product", () => {
+    const m = new Matrix([
+      [9, 3, 5],
+      [-6, -9, 7],
+      [-1, -8, 1]
+    ]);
+    const n = m.scalarProduct(2);
+    expect(n.toString()).toEqual("{{18, 6, 10}, {-12, -18, 14}, {-2, -16, 2}}");
+  });
 
-  test.todo("add");
+  test("add", () => {
+    const m = new Matrix([
+      [0, 4],
+      [7, 0],
+      [3, 1]
+    ]);
 
-  test.todo("transpose");
+    const n = new Matrix([
+      [1, 2],
+      [2, 3],
+      [0, 4]
+    ]);
+
+    expect(m.add(n).toString()).toEqual("{{1, 6}, {9, 3}, {3, 5}}");
+
+    const x = new Matrix([
+      [1, 6],
+      [9, 3]
+    ]);
+
+    expect(x.add(IdentityMatrix(2).scalarProduct(-1)).toString()).toEqual(
+      "{{0, 6}, {9, 2}}"
+    );
+  });
+
+  test("transpose", () => {
+    const m = new Matrix([
+      [0, 4],
+      [7, 0],
+      [3, 1]
+    ]);
+    expect(m.transpose().toString()).toEqual("{{0, 7, 3}, {4, 0, 1}}");
+  });
 
   test("determinant", () => {
     const m = new Matrix([
