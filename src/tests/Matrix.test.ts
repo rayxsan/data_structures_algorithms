@@ -14,6 +14,15 @@ describe("Matrix", () => {
     expect(m.getRow(2)).toStrictEqual([-6, -9, 7]);
     expect(m.getRow(3)).toStrictEqual([-1, -8, 1]);
   });
+
+  test("Get Max Rows and Columns", () => {
+    const m = new Matrix([
+      [9, 3, 5],
+      [-6, -9, 7]
+    ]);
+    expect(m.getMaxRows()).toEqual(2);
+    expect(m.getMaxColumns()).toEqual(3);
+  });
   test("getColumn", () => {
     const m = new Matrix([
       [9, 3, 5],
@@ -24,6 +33,7 @@ describe("Matrix", () => {
     expect(m.getColumn(2)).toStrictEqual([3, -9, -8]);
     expect(m.getColumn(3)).toStrictEqual([5, 7, 1]);
   });
+
   test("getValues", () => {
     const m = new Matrix([
       [1, 2, 3],
@@ -56,9 +66,7 @@ describe("Matrix", () => {
     expect(m.multiply(n).toString()).toEqual(
       "{{116, -80, 142}, {-14, 14, -172}, {76, 122, -120}}"
     );
-  });
 
-  test.todo("multiply with identity");
 
   test("scalar product", () => {
     const m = new Matrix([

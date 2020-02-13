@@ -56,15 +56,32 @@ class Matrix {
     return new Matrix(result);
   }
 
+  getMaxRows(): number {
+    return this.rows.length;
+  }
+
+  getMaxColumns() {
+    return this.rows[0].length;
+  }
+
   multiply(other: Matrix): Matrix {
+    if (this.rows[0].length !== other.getMaxRows()) {
+      throw new Error("Wrong Matrix Dimensions");
+    }
+
     const result = new Array<Array<number>>();
 
     for (let i = 0; i < this.rows.length; i++) {
-      for (let j = 0; j < this.rows[i].length; j++) {
-        if (!result[i]) {
-          result[i] = [];
+      for (let j = 0; j < other.getMaxColumns(); j++) {
+        for (let k = 0; k < this.rows[0].length; k++) {
+          if (!result[i]) {
+            result[i] = [];
+            for (let l = 0; l < other.getMaxColumns(); l++) {
+              result[i][l] = 0;
+            }
+          }
+          result[i][j] += this.rows[i][k] * other.get(k + 1, j + 1);
         }
-        result[i][j] = this.rows[i][j] * other.get(i + 1, j + 1);
       }
     }
     return new Matrix(result);
