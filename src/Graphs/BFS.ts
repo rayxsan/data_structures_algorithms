@@ -9,6 +9,7 @@ class BreadthFirstSearch {
   private s: number;
   //private fn: (idx: number) => void;
 
+  // TODO: take a function to be call on every vertex visit passing to it the vertex and its index
   constructor(G: Digraph, source: number) {
     if (source < 0 || source >= G.V()) {
       throw new Error("Invalid source index");
