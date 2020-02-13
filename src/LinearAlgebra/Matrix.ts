@@ -5,14 +5,17 @@ class Matrix {
   private rows: Array<Array<number>>;
 
   constructor(rows: Array<Array<number>>) {
+    // TODO: check that the arrays of columns all have the same size!
     this.rows = rows;
   }
 
   getRow(n: number): Array<number> {
+    // TODO: don't force the index to start at 1. It's inconsistent with the rest of the containers
     return this.rows[n - 1];
   }
 
   getColumn(n: number): Array<number> {
+    // TODO: don't force 1 to be the first index. Let 0 be the first, like everywhere else!
     const temp = new Array<number>();
     for (let i = 0; i < this.rows.length; i++) {
       temp[i] = this.rows[i][n - 1];
@@ -102,6 +105,7 @@ class Matrix {
   }
 
   equal(other: Matrix): boolean {
+    // TODO: compare the dimensions before you start ur loops!
     for (let i = 1; i <= this.rows.length; i++) {
       for (let j = 1; j <= this.rows[i - 1].length; j++) {
         if (this.rows[i - 1][j - 1] !== other.get(i, j)) {
@@ -113,6 +117,7 @@ class Matrix {
   }
 
   toString(): string {
+    // TODO: This seems unnecessarily complicated. Consider re-writing without using the .replace method.
     const header = "{";
     const footer = "}, ";
     let body = "";
@@ -136,6 +141,8 @@ export function IdentityMatrix(size: number): Matrix {
   const temp = new Array<Array<number>>();
   for (let i = 0; i < size; i++) {
     for (let j = 0; j < size; j++) {
+      // NOTE: What about something like this
+      // temp[i][j] = i === j ? 1 : 0;
       if (!temp[i]) {
         temp[i] = [];
       }
@@ -151,6 +158,7 @@ export function IdentityMatrix(size: number): Matrix {
 
 export default Matrix;
 
+// TODO: remove this test matrix from here!
 const m = new Matrix([
   [9, 3, 5],
   [-6, -9, 7],
