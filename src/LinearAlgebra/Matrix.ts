@@ -5,26 +5,28 @@ class Matrix {
   private rows: Array<Array<number>>;
 
   constructor(rows: Array<Array<number>>) {
-    // TODO: check that the arrays of columns all have the same size!
+    for (let i = 1; i < rows.length; i++) {
+      if (rows[i].length !== rows[0].length) {
+        throw new Error("This is not a Matrix");
+      }
+    }
     this.rows = rows;
   }
 
   getRow(n: number): Array<number> {
-    // TODO: don't force the index to start at 1. It's inconsistent with the rest of the containers
-    return this.rows[n - 1];
+    return this.rows[n];
   }
 
   getColumn(n: number): Array<number> {
-    // TODO: don't force 1 to be the first index. Let 0 be the first, like everywhere else!
     const temp = new Array<number>();
     for (let i = 0; i < this.rows.length; i++) {
-      temp[i] = this.rows[i][n - 1];
+      temp[i] = this.rows[i][n];
     }
     return temp;
   }
 
   get(row: number, column: number): number {
-    return this.rows[row - 1][column - 1];
+    return this.rows[row][column];
   }
 
   transpose(): Matrix {
@@ -53,22 +55,14 @@ class Matrix {
         if (!result[i]) {
           result[i] = [];
         }
-        result[i][j] = this.rows[i][j] + other.get(i + 1, j + 1);
+        result[i][j] = this.rows[i][j] + other.get(i, j);
       }
     }
     return new Matrix(result);
   }
 
-  getMaxRows(): number {
-    return this.rows.length;
-  }
-
-  getMaxColumns() {
-    return this.rows[0].length;
-  }
-
   multiply(other: Matrix): Matrix {
-    if (this.rows[0].length !== other.getMaxRows()) {
+    if (this.getMaxColumns() !== other.getMaxRows()) {
       throw new Error("Wrong Matrix Dimensions");
     }
 
@@ -83,7 +77,7 @@ class Matrix {
               result[i][l] = 0;
             }
           }
-          result[i][j] += this.rows[i][k] * other.get(k + 1, j + 1);
+          result[i][j] += this.rows[i][k] * other.get(k, j);
         }
       }
     }
@@ -105,10 +99,12 @@ class Matrix {
   }
 
   equal(other: Matrix): boolean {
-    // TODO: compare the dimensions before you start ur loops!
-    for (let i = 1; i <= this.rows.length; i++) {
-      for (let j = 1; j <= this.rows[i - 1].length; j++) {
-        if (this.rows[i - 1][j - 1] !== other.get(i, j)) {
+    if (!this.compare(other)) {
+      throw new Error("Wrong Matrix Dimensions");
+    }
+    for (let i = 0; i < this.rows.length; i++) {
+      for (let j = 0; j < this.rows[i].length; j++) {
+        if (this.rows[i][j] !== other.get(i, j)) {
           return false;
         }
       }
@@ -131,6 +127,23 @@ class Matrix {
       .replace(/},  /g, "}, ");
     return result;
   }
+
+  getMaxRows(): number {
+    return this.rows.length;
+  }
+
+  getMaxColumns() {
+    return this.rows[0].length;
+  }
+  compare(other: Matrix): boolean {
+    if (
+      this.getMaxRows() === other.getMaxRows() &&
+      this.getMaxColumns() === other.getMaxColumns()
+    ) {
+      return true;
+    }
+    return false;
+  }
 }
 
 /**
@@ -141,8 +154,9 @@ export function IdentityMatrix(size: number): Matrix {
   const temp = new Array<Array<number>>();
   for (let i = 0; i < size; i++) {
     for (let j = 0; j < size; j++) {
-      // NOTE: What about something like this
-      // temp[i][j] = i === j ? 1 : 0;
+      // NOTE: What about something like this....
+      //temp[i][j] = i === j ? 1 : 0;
+      // TypeError: Cannot set property '0' of undefined
       if (!temp[i]) {
         temp[i] = [];
       }
@@ -157,12 +171,3 @@ export function IdentityMatrix(size: number): Matrix {
 }
 
 export default Matrix;
-
-// TODO: remove this test matrix from here!
-const m = new Matrix([
-  [9, 3, 5],
-  [-6, -9, 7],
-  [-1, -8, 1]
-]);
-
-//console.log(m.toString());

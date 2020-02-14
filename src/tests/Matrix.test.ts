@@ -4,15 +4,26 @@ import Matrix, { IdentityMatrix } from "../LinearAlgebra/Matrix";
 // You can find examples here: https://www.wolframalpha.com/examples/mathematics/algebra/matrices/
 
 describe("Matrix", () => {
+  test("Constructor", () => {
+    expect(
+      () =>
+        new Matrix([
+          [9, 3],
+          [-6, -9, 3],
+          [-1, -8, 1]
+        ])
+    ).toThrowError("This is not a Matrix");
+  });
+
   test("getRow", () => {
     const m = new Matrix([
       [9, 3, 5],
       [-6, -9, 7],
       [-1, -8, 1]
     ]);
-    expect(m.getRow(1)).toStrictEqual([9, 3, 5]);
-    expect(m.getRow(2)).toStrictEqual([-6, -9, 7]);
-    expect(m.getRow(3)).toStrictEqual([-1, -8, 1]);
+    expect(m.getRow(0)).toEqual([9, 3, 5]);
+    expect(m.getRow(1)).toEqual([-6, -9, 7]);
+    expect(m.getRow(2)).toEqual([-1, -8, 1]);
   });
 
   test("Get Max Rows and Columns", () => {
@@ -29,9 +40,9 @@ describe("Matrix", () => {
       [-6, -9, 7],
       [-1, -8, 1]
     ]);
-    expect(m.getColumn(1)).toStrictEqual([9, -6, -1]);
-    expect(m.getColumn(2)).toStrictEqual([3, -9, -8]);
-    expect(m.getColumn(3)).toStrictEqual([5, 7, 1]);
+    expect(m.getColumn(0)).toEqual([9, -6, -1]);
+    expect(m.getColumn(1)).toEqual([3, -9, -8]);
+    expect(m.getColumn(2)).toEqual([5, 7, 1]);
   });
 
   test("getValues", () => {
@@ -42,8 +53,8 @@ describe("Matrix", () => {
     ]);
 
     const compArray = [];
-    for (let i = 1; i <= 3; i++) {
-      for (let j = 1; j <= 3; j++) {
+    for (let i = 0; i < 3; i++) {
+      for (let j = 0; j < 3; j++) {
         compArray.push(m.get(i, j));
       }
     }
@@ -67,6 +78,13 @@ describe("Matrix", () => {
       "{{116, -80, 142}, {-14, 14, -172}, {76, 122, -120}}"
     );
 
+    const x = new Matrix([
+      [18, 6, 4],
+      [-12, -18, 5]
+    ]);
+
+    expect(() => m.multiply(x)).toThrowError("Wrong Matrix Dimensions");
+  });
 
   test("scalar product", () => {
     const m = new Matrix([
@@ -137,6 +155,13 @@ describe("Matrix", () => {
     ]);
 
     expect(m.equal(n)).toBe(true);
+
+    const x = new Matrix([
+      [1, 6],
+      [9, 3]
+    ]);
+
+    expect(() => m.equal(x)).toThrowError("Wrong Matrix Dimensions");
   });
 
   test("toString", () => {
