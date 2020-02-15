@@ -24,6 +24,8 @@ describe("Matrix", () => {
     expect(m.getRow(0)).toEqual([9, 3, 5]);
     expect(m.getRow(1)).toEqual([-6, -9, 7]);
     expect(m.getRow(2)).toEqual([-1, -8, 1]);
+    expect(m.getRow(-1)).toThrow();
+    expect(m.getRow(5)).toThrow();
   });
 
   test("Get Max Rows and Columns", () => {
@@ -43,6 +45,8 @@ describe("Matrix", () => {
     expect(m.getColumn(0)).toEqual([9, -6, -1]);
     expect(m.getColumn(1)).toEqual([3, -9, -8]);
     expect(m.getColumn(2)).toEqual([5, 7, 1]);
+    expect(m.getRow(-1)).toThrow();
+    expect(m.getRow(5)).toThrow();
   });
 
   test("getValues", () => {
@@ -58,9 +62,17 @@ describe("Matrix", () => {
         compArray.push(m.get(i, j));
       }
     }
+    // TODO: tes the get(i,j) method of the matrix, not the array.
     for (let i = 0; i < compArray.length; i++) {
       expect(compArray[i]).toBe(i + 1);
     }
+    
+    expect(m.get(0,0)).toBe(1);
+    expect(m.get(1,0)).toBe(4);
+    expect(m.get(2,2)).toBe(9);
+    
+    expect(m.get(-1, 0)).toThrow();
+    expect(m.get(0,5)).toThrow();
   });
 
   test("multiply", () => {
