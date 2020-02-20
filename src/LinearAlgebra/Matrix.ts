@@ -14,10 +14,16 @@ class Matrix {
   }
 
   getRow(n: number): Array<number> {
+    if (n < 0 || n > this.getMaxRows()) {
+      throw new Error("Wrong Row Index");
+    }
     return this.rows[n];
   }
 
   getColumn(n: number): Array<number> {
+    if (n < 0 || n > this.getMaxColumns()) {
+      throw new Error("Wrong Column Index");
+    }
     const temp = new Array<number>();
     for (let i = 0; i < this.rows.length; i++) {
       temp[i] = this.rows[i][n];
@@ -26,6 +32,12 @@ class Matrix {
   }
 
   get(row: number, column: number): number {
+    if (row < 0 || row > this.getMaxRows()) {
+      throw new Error("Wrong Row Index");
+    }
+    if (column < 0 || column > this.getMaxColumns()) {
+      throw new Error("Wrong Column Index");
+    }
     return this.rows[row][column];
   }
 
@@ -43,8 +55,51 @@ class Matrix {
     return new Matrix(result);
   }
 
+  private getCofactor(
+    m: Array<Array<number>>,
+    temp: Array<Array<number>>,
+    p: number,
+    q: number,
+    n: number
+  ) {
+    let i = 0;
+    let j = 0;
+
+    for (let row = 0; row < n; row++) {
+      for (let col = 0; col < n; col++) {
+        if (row != p && col != q) {
+          if (!temp[i]) {
+            temp[i] = [];
+          }
+
+          temp[i][j++] = m[row][col];
+          if (j === n - 1) {
+            j = 0;
+            i++;
+          }
+        }
+      }
+    }
+  }
   determinant(): number {
-    return 0;
+    let result = 0;
+    let n = this.getMaxRows();
+    if (n === 1) {
+      return this.rows[0][0];
+    }
+
+    let temp = new Array<Array<number>>(); //store coFactors
+
+    let sign = 1;
+
+    n = n - 1;
+    /*  for (let f = 0; f < n; f++) {
+      this.getCofactor(this.rows, temp, 0, f, n);
+      result += sign * this.rows[0][f] * this.determinant();
+      sign = -sign;
+    }
+ */
+    return result;
   }
 
   add(other: Matrix): Matrix {
